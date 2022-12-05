@@ -2,10 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class GamePanel extends JPanel implements ActionListener {
-    private JButton buttonMenu;
+public class InstructionsPanel extends JPanel implements ActionListener{
+	private JButton buttonMenu;
 
-    public GamePanel() {
+    public InstructionsPanel() {
         buttonMenu = new JButton("Menu");
         buttonMenu.addActionListener(this);
         setLayout(new FlowLayout());
