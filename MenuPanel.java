@@ -35,7 +35,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 		add(btnGame);
 		add(btnInstructions);
 		add(btnQuit);
-		setBackground(new Color(100, 100, 100));
+		setBackground(new Color(255, 255, 255));
 		// Set Background
 	}
 
@@ -53,5 +53,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 700, 1200, 100);
 	}
 }
