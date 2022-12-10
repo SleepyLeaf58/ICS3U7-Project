@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 public class MenuPanel extends JPanel implements ActionListener {
@@ -7,9 +8,14 @@ public class MenuPanel extends JPanel implements ActionListener {
 	private JButton btnGame;
 	private JButton btnInstructions;
 	private JButton btnQuit;
+	private BufferedImage menuGraphic = null;
+	private Timer t;
 
 	public MenuPanel() {
 		setLayout(null);
+		ImgAnimation.loadIdle();
+		t = new Timer(120, this);
+		t.start();
 		
 		//Title
 		title = new JLabel("SMASH");
@@ -46,6 +52,10 @@ public class MenuPanel extends JPanel implements ActionListener {
 		else if (e.getSource() == btnInstructions) {
 			Frame.layout.show(Frame.pane, "Instructions");
 		}
+		else if (e.getSource() == t) {
+			menuGraphic = ImgAnimation.getNextIdle();
+			repaint();
+		}
 		else {
 			System.exit(0);
 		}
@@ -55,5 +65,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 700, 1200, 100);
+		g.drawImage(menuGraphic, 0, 100,null);
 	}
 }
