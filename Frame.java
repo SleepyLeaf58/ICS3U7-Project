@@ -32,7 +32,7 @@ public class Frame extends JFrame {
 	public static void main(String[] args) {
 		Frame frame = new Frame();
 
-		frame.setSize(1200, 800);
+		frame.setSize(1024, 768);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
