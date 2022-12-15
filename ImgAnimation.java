@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.Buffer;
 
 public class ImgAnimation {
     private static BufferedImage idleImg;
@@ -17,35 +16,33 @@ public class ImgAnimation {
 
         try {
             idleImg = ImageIO.read(new File("Images/Player/Idle/Idle_000.png"));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error " + e);
         }
 
         for (int i = 0; i <= 31; i++) {
             try {
                 if (i <= 9) {
-                    filePath = "Images/Player/Idle/Idle_00" + i +".png";
-                }
-                else {
-                    filePath = "Images/Player/Idle/Idle_0" + i +".png";
+                    filePath = "Images/Player/Idle/Idle_00" + i + ".png";
+                } else {
+                    filePath = "Images/Player/Idle/Idle_0" + i + ".png";
                 }
 
                 image = ImageIO.read(new File(filePath));
                 idleArr[i] = image;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error " + e);
             }
         }
     }
 
-    public static BufferedImage getNextIdle(){
-        idleCnt=(idleCnt+1) % idleArr.length;
+    public static BufferedImage getNextIdle() {
+        idleCnt = (idleCnt + 1) % idleArr.length;
         return idleArr[idleCnt];
     }
 
     public static BufferedImage getIdleImg() {
+        idleCnt = 0;
         return idleImg;
     }
 }

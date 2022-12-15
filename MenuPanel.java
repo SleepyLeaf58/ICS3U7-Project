@@ -16,27 +16,27 @@ public class MenuPanel extends JPanel implements ActionListener {
 		ImgAnimation.loadIdle();
 		t = new Timer(120, this);
 		t.start();
-		
-		//Title
+
+		// Title
 		title = new JLabel("SMASH");
 		title.setBounds(705, 200, 300, 70);
 		title.setFont(new Font("Arial", Font.TRUETYPE_FONT, 80));
-		
-		//Play Button
+
+		// Play Button
 		btnGame = new JButton("Play");
 		btnGame.addActionListener(this);
 		btnGame.setBounds(700, 300, 300, 70);
-		
-		//Instructions Button
+
+		// Instructions Button
 		btnInstructions = new JButton("Instructions");
 		btnInstructions.addActionListener(this);
 		btnInstructions.setBounds(700, 400, 300, 70);
-		
-		//Quit Button
+
+		// Quit Button
 		btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(this);
 		btnQuit.setBounds(700, 500, 300, 70);
-		
+
 		add(title);
 		add(btnGame);
 		add(btnInstructions);
@@ -48,23 +48,21 @@ public class MenuPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnGame) {
 			Frame.layout.show(Frame.pane, "Game");
-		}
-		else if (e.getSource() == btnInstructions) {
+		} else if (e.getSource() == btnInstructions) {
 			Frame.layout.show(Frame.pane, "Instructions");
-		}
-		else if (e.getSource() == t) {
+		} else if (e.getSource() == t) {
 			menuGraphic = ImgAnimation.getNextIdle();
 			repaint();
-		}
-		else {
+		} else {
 			System.exit(0);
 		}
 	}
 
 	public void paintComponent(Graphics g) {
+		// Improve Resolution
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 700, 1200, 100);
-		g.drawImage(menuGraphic, 0, 100,null);
+		g.drawImage(menuGraphic, -240, -200, 1196, 937, null);
 	}
 }
