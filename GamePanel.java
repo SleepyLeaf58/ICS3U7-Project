@@ -2,19 +2,37 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class GamePanel extends JPanel implements ActionListener {
-    private Level level = null;
+public class GamePanel extends JPanel implements ActionListener, KeyListener {
+    final int FPS = 60;
+    Game game;
+    Timer timer = new Timer( 1000 / FPS, this);
     public GamePanel() {
-        level = new Level("Levels/Level.txt");
-        level.setupLevel();
+        addKeyListener(this);
+        timer.start();
+        game = new Game();
+
     }
 
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == timer) {
+            repaint();
+        }
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        level.drawLevel(g);
+        game.run(g);
+    }
+
+    public void keyPressed(KeyEvent key) {
+        game.keyPressed(key);
+    }
+
+    public void keyReleased(KeyEvent key) {
+        game.keyReleased(key);
+    }
+
+    public void keyTyped(KeyEvent key) {
+
     }
 }

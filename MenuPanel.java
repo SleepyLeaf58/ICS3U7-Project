@@ -19,23 +19,23 @@ public class MenuPanel extends JPanel implements ActionListener {
 
 		// Title
 		title = new JLabel("SMASH");
-		title.setBounds(705, 200, 300, 70);
+		title.setBounds(655, 200, 300, 70);
 		title.setFont(new Font("Arial", Font.TRUETYPE_FONT, 80));
 
 		// Play Button
 		btnGame = new JButton("Play");
 		btnGame.addActionListener(this);
-		btnGame.setBounds(700, 300, 300, 70);
+		btnGame.setBounds(650, 300, 300, 70);
 
 		// Instructions Button
 		btnInstructions = new JButton("Instructions");
 		btnInstructions.addActionListener(this);
-		btnInstructions.setBounds(700, 400, 300, 70);
+		btnInstructions.setBounds(650, 400, 300, 70);
 
 		// Quit Button
 		btnQuit = new JButton("Quit");
 		btnQuit.addActionListener(this);
-		btnQuit.setBounds(700, 500, 300, 70);
+		btnQuit.setBounds(650, 500, 300, 70);
 
 		add(title);
 		add(btnGame);
@@ -47,9 +47,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnGame) {
-			Frame.layout.show(Frame.pane, "Game");
+			Frame.flipToCard("Game");
 		} else if (e.getSource() == btnInstructions) {
-			Frame.layout.show(Frame.pane, "Instructions");
+			Frame.flipToCard("Instructions");
 		} else if (e.getSource() == t) {
 			menuGraphic = ImgAnimation.getNextIdle();
 			repaint();
@@ -63,6 +63,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 700, 1200, 100);
-		g.drawImage(menuGraphic, -240, -200, 1196, 937, null);
+		g.drawImage(menuGraphic, -250, -200, 1196, 937, null);
 	}
 }
