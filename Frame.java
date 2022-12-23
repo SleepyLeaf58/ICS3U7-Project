@@ -11,9 +11,9 @@ public class Frame extends JFrame {
 	static CardLayout layout;
 	static Container pane;
 
-	private MenuPanel menu;
-	private InstructionsPanel instructions;
-	private GamePanel game;
+	private static MenuPanel menu;
+	private static InstructionsPanel instructions;
+	private static GamePanel game;
 
 	public Frame() {
 		pane = getContentPane();
@@ -36,5 +36,14 @@ public class Frame extends JFrame {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+
+	public static void flipToCard(String cardID) {
+		layout.show(pane, cardID);
+
+		if (cardID.equals("Game"))
+			game.requestFocusInWindow();
+		else if (cardID.equals("Instructions"))
+			instructions.requestFocusInWindow();
 	}
 }
