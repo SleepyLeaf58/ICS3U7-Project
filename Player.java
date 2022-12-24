@@ -1,3 +1,4 @@
+
 /*
 
  */
@@ -6,17 +7,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Player extends Sprite{
+public class Player extends Sprite {
+
     private int speed = 8;
     private int gravity = 1;
     private int jumpHeight = 20;
     private int percent = 0;
-    private boolean jumped = false;
+
+    private int jumpCount = 2;
+
     private Vector2 dir = new Vector2();
     private ArrayList<Tile> tileMap;
 
     public Player(int x, int y, ArrayList<Tile> tileMap) {
-        super(x, y, 50, 50);
+        super(x, y, 35, 50);
         this.tileMap = tileMap;
     }
 
@@ -25,8 +29,11 @@ public class Player extends Sprite{
             dir.setX(-1);
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             dir.setX(1);
-        else if (onGround() && e.getKeyCode() == KeyEvent.VK_UP) {
+        else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
+            if (jumpCount == 1)
+                dir.setY(0);
             dir.incrementY(-jumpHeight);
+            jumpCount--;
         }
     }
 
@@ -35,7 +42,7 @@ public class Player extends Sprite{
             dir.setX(0);
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             dir.setX(0);
-        
+
     }
 
     private void verticalCollisions() {
@@ -45,7 +52,7 @@ public class Player extends Sprite{
                     y = tile.getTTop() - 50;
                     dir.setY(0);
                 }
-            } 
+            }
         }
     }
 
@@ -57,16 +64,20 @@ public class Player extends Sprite{
     }
 
     private boolean onGround() {
-    	for (Tile tile : tileMap) {
-    		if (y == tile.getTTop() - 50)
-    			return true;
-    	}
-    	return false;
+        for (Tile tile : tileMap) {
+            if (y == tile.getTTop() - 50) {
+                jumpCount = 2;
+                return true;
+            }
+        }
+        return false;
     }
+
     private void applyGravity() {
         dir.incrementY(gravity);
         y += dir.getY();
     }
+
     public void update(Graphics g) {
         x += dir.getX() * speed;
         applyGravity();
@@ -74,6 +85,7 @@ public class Player extends Sprite{
         drawSprite(g);
         System.out.println(onGround());
     }
+
     public void drawSprite(Graphics g) {
         g.setColor(Color.red);
         g.drawRect(x, y, width, height);
