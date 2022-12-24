@@ -11,6 +11,7 @@ public class Player extends Sprite{
     private int gravity = 1;
     private int jumpHeight = 20;
     private int percent = 0;
+    private boolean jumped = false;
     private Vector2 dir = new Vector2();
     private ArrayList<Tile> tileMap;
 
@@ -24,8 +25,9 @@ public class Player extends Sprite{
             dir.setX(-1);
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             dir.setX(1);
-        else if (e.getKeyCode() == KeyEvent.VK_UP)
-            dir.incrementY(jumpHeight);;
+        else if (onGround() && e.getKeyCode() == KeyEvent.VK_UP) {
+            dir.incrementY(-jumpHeight);
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -33,29 +35,34 @@ public class Player extends Sprite{
             dir.setX(0);
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             dir.setX(0);
-        else if (e.getKeyCode() == KeyEvent.VK_UP)
-            dir.setY(0);
+        
     }
 
     private void verticalCollisions() {
         for (Tile tile : tileMap) {
             if (getBounds().intersects(tile.getBounds())) {
                 if (dir.getY() > 0) {
-                    y = tile.getTBot() - tile.getTileHeight();
+                    y = tile.getTTop() - 50;
                     dir.setY(0);
                 }
-            }
+            } 
         }
     }
 
     private void horizontalCollisions() {
         for (Tile tile : tileMap) {
             if (getBounds().intersects(tile.getBounds())) {
-                ;
             }
         }
     }
 
+    private boolean onGround() {
+    	for (Tile tile : tileMap) {
+    		if (y == tile.getTTop() - 50)
+    			return true;
+    	}
+    	return false;
+    }
     private void applyGravity() {
         dir.incrementY(gravity);
         y += dir.getY();
@@ -65,6 +72,7 @@ public class Player extends Sprite{
         applyGravity();
         verticalCollisions();
         drawSprite(g);
+        System.out.println(onGround());
     }
     public void drawSprite(Graphics g) {
         g.setColor(Color.red);
