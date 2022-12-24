@@ -10,6 +10,7 @@ public class Player extends Sprite{
     private int speed = 8;
     private int gravity = 1;
     private int jumpHeight = 20;
+    private int percent = 0;
     private Vector2 dir = new Vector2();
     private ArrayList<Tile> tileMap;
 
