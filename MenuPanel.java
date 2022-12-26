@@ -10,11 +10,15 @@ public class MenuPanel extends JPanel implements ActionListener {
 	private JButton btnQuit;
 	private BufferedImage menuGraphic = null;
 	private Timer t;
+	private Animation menuAnimation;
 
 	public MenuPanel() {
 		setLayout(null);
-		ImgAnimation.loadIdle();
+		menuAnimation = new Animation("Images/Player/Idle/Idle_", 32);
 		t = new Timer(120, this);
+
+		menuAnimation.load();
+
 		t.start();
 
 		// Title
@@ -51,7 +55,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 		} else if (e.getSource() == btnInstructions) {
 			Frame.flipToCard("Instructions");
 		} else if (e.getSource() == t) {
-			menuGraphic = ImgAnimation.getNextIdle();
+			menuGraphic = menuAnimation.getNextFrame();
 			repaint();
 		} else {
 			System.exit(0);
