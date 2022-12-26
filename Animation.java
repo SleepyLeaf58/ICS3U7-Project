@@ -20,6 +20,7 @@ public class Animation {
 
         for (int i = 0; i < frames; i++) {
             try {
+                System.out.println(filePath + i + ".png");
                 image = ImageIO.read(new File(filePath + i + ".png"));
                 arr[i] = image;
             } catch (Exception e) {
@@ -28,8 +29,18 @@ public class Animation {
         }
     }
 
-    public BufferedImage getNextFrame() {
-        cnt = (cnt + 1) % arr.length;
-        return arr[cnt];
+    public BufferedImage getNextFrame(Boolean cycle) {
+        if (cycle) {
+            if (cnt >= arr.length - 1)
+                cnt = 0;
+        } else {
+            if (cnt >= arr.length - 1)
+                cnt = arr.length - 1;
+        }
+        return arr[cnt++];
+    }
+
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
     }
 }

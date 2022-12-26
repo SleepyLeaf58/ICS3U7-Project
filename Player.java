@@ -22,6 +22,9 @@ public class Player extends Sprite {
 
     private Animation idle;
     private Animation running;
+    private Animation jumping;
+    private Animation falling;
+
     private char orientation;
     private String status;
     private final int xShiftR = 50;
@@ -34,8 +37,13 @@ public class Player extends Sprite {
 
         idle = new Animation("Images/Player/Idle/Idle_", 32);
         running = new Animation("Images/Player/Running/Running_", 24);
+        jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
+        falling = new Animation("Images/Player/Falling/Falling_", 12);
+
         idle.load();
         running.load();
+        jumping.load();
+        falling.load();
     }
 
     public void keyPressed(KeyEvent e) {
@@ -62,10 +70,16 @@ public class Player extends Sprite {
     }
 
     private void getStatus() {
-        if (dir.getX() != 0)
-            status = "run";
-        else
-            status = "idle";
+        if (dir.getY() > 0)
+            status = "fall";
+        else if (dir.getY() < 0)
+            status = "jump";
+        else {
+            if (dir.getX() != 0)
+                status = "run";
+            else
+                status = "idle";
+        }
     }
 
     private void verticalCollisions() {
@@ -102,10 +116,21 @@ public class Player extends Sprite {
     }
 
     private void animate() {
-        if (status.equals("idle"))
-            image = idle.getNextFrame();
-        else if (status.equals("run"))
-            image = running.getNextFrame();
+        if (status.equals("idle") && onGround()) {
+            image = idle.getNextFrame(true);
+            jumping.setCnt(0);
+            falling.setCnt(0);
+        } else if (status.equals("run") && onGround()) {
+            image = running.getNextFrame(true);
+            jumping.setCnt(0);
+            falling.setCnt(0);
+        } else if (status.equals("jump")) {
+            image = jumping.getNextFrame(false);
+            falling.setCnt(0);
+        } else if (status.equals("fall")) {
+            image = falling.getNextFrame(false);
+            jumping.setCnt(0);
+        }
     }
 
     public void update(Graphics g) {
@@ -117,7 +142,6 @@ public class Player extends Sprite {
         verticalCollisions();
 
         drawSprite(g);
-        System.out.println(status);
     }
 
     public void drawSprite(Graphics g) {
