@@ -9,6 +9,7 @@ public class Game {
     private Player player;
     private ArrayList<Player> activeSprites = new ArrayList<Player>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+
     public Game() {
         map = new Map("Levels/Level.txt");
         map.setupMap();
@@ -31,6 +32,7 @@ public class Game {
             player.keyReleased(key);
         }
     }
+
     public void run(Graphics g) {
         for (Sprite sprite : sprites) {
             sprite.update(g);

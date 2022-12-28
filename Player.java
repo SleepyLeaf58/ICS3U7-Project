@@ -10,7 +10,10 @@ import java.util.ArrayList;
 
 public class Player extends Sprite {
 
-    private int speed = 8;
+    private double speed = 8;
+    final private double accel = 0.15;
+    private int max = 11;
+
     private int gravity = 1;
     private int jumpHeight = 20;
     private int percent = 0;
@@ -49,10 +52,17 @@ public class Player extends Sprite {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             dir.setX(-1);
-            orientation = 'l';
+            if (orientation == 'r')
+                speed = 8;
+            if (onGround())
+                orientation = 'l';
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             dir.setX(1);
-            orientation = 'r';
+            if (orientation == 'l')
+                speed = 8;
+            if (onGround()) {
+                orientation = 'r';
+            }
         } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
             if (jumpCount == 1)
                 dir.setY(0);
@@ -100,6 +110,17 @@ public class Player extends Sprite {
         }
     }
 
+    private void speed_accel() {
+
+        if (onGround() && dir.getX() != 0) {
+            if (speed < max)
+                speed += accel;
+
+        } else {
+            speed = 8;
+        }
+    }
+
     private boolean onGround() {
         for (Tile tile : tileMap) {
             if (y == tile.getTTop() - 70) {
@@ -135,13 +156,19 @@ public class Player extends Sprite {
 
     public void update(Graphics g) {
         x += dir.getX() * speed;
+
         getStatus();
         animate();
+
+        // Only allows for 1 midair jump
+        if (!onGround() && jumpCount == 2)
+            jumpCount--;
 
         applyGravity();
         verticalCollisions();
 
         drawSprite(g);
+        speed_accel();
     }
 
     public void drawSprite(Graphics g) {
