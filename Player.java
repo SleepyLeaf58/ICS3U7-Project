@@ -27,12 +27,15 @@ public class Player extends Sprite {
     private Animation running;
     private Animation jumping;
     private Animation falling;
+    private Animation slashing;
 
     private char orientation;
     private String status;
     private final int xShiftR = 50;
     private final int xShiftL = 30;
     private final int yShift = 50;
+
+    private char move;
 
     public Player(int x, int y, ArrayList<Tile> tileMap) {
         super(x, y, 45, 70);
@@ -42,11 +45,13 @@ public class Player extends Sprite {
         running = new Animation("Images/Player/Running/Running_", 24);
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
+        slashing = new Animation("Images/Player/Slashing/Slashing_", 20);
 
         idle.load();
         running.load();
         jumping.load();
         falling.load();
+        slashing.load();
     }
 
     public void keyPressed(KeyEvent e) {
@@ -87,8 +92,12 @@ public class Player extends Sprite {
         else {
             if (dir.getX() != 0)
                 status = "run";
-            else
-                status = "idle";
+            else {
+                if (move == '1')
+                    status = "slash";
+                else
+                    status = "idle";
+            }
         }
     }
 
@@ -151,6 +160,10 @@ public class Player extends Sprite {
         } else if (status.equals("fall")) {
             image = falling.getNextFrame(false);
             jumping.setCnt(0);
+        }
+
+        else if (status.equals("slash")) {
+            image = slashing.getNextFrame(false);
         }
     }
 
