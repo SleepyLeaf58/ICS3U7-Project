@@ -14,8 +14,6 @@ public class Game {
         map.setupMap();
         tileMap = map.getTileMap();
         activeSprites.add(new Player(400, 400, tileMap));
-        activeSprites.add(new Player(600, 600, tileMap));
-        activeSprites.add(new Player(800, 800, tileMap));
 
         sprites.addAll(tileMap);
         sprites.addAll(activeSprites);
