@@ -57,7 +57,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 			Frame.flipToCard("Instructions");
 			t.stop();
 		} else if (e.getSource() == t) {
-			menuGraphic = menuAnimation.getNextFrame();
+			menuGraphic = menuAnimation.getNextFrame(true);
 			repaint();
 		} else {
 			System.exit(0);
