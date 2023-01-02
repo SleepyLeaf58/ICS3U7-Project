@@ -29,7 +29,7 @@ public class Player extends Sprite {
     private Animation falling;
     private Animation slashing;
 
-    private char orientation;
+    private char orientation = 'l';
     private String status;
     private final int xShiftR = 50;
     private final int xShiftL = 30;
@@ -37,10 +37,13 @@ public class Player extends Sprite {
 
     private char move;
 
+    private boolean attacking = false;
+
     // Timer for abilities
     private int ticks = 0;
-    private int start;
-    private int end;
+
+
+    private Projectile swordBeam;
 
     public Player(int x, int y, ArrayList<Tile> tileMap) {
         super(x, y, 45, 70);
@@ -51,6 +54,7 @@ public class Player extends Sprite {
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
         slashing = new Animation("Images/Player/Slashing/Slashing_", 20);
+        swordBeam = new Projectile (this, 40, 75, 8, "Images/Player/swordBeam");
 
         idle.load();
         running.load();
@@ -61,38 +65,44 @@ public class Player extends Sprite {
     }
 
     public void keyPressed(KeyEvent e) {
-        // Movement Handling
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            dir.setX(-1);
-            if (orientation == 'r')
-                speed = 8;
-            if (onGround())
-                orientation = 'l';
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            dir.setX(1);
-            if (orientation == 'l')
-                speed = 8;
-            if (onGround()) {
-                orientation = 'r';
-            }
-        } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
-            if (jumpCount == 1)
-                dir.setY(0);
-            dir.incrementY(-jumpHeight);
-            jumpCount--;
+        if (!attacking) {
+            // Movement Handling
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                dir.setX(-1);
+                if (orientation == 'r')
+                    speed = 8;
+                if (onGround())
+                    orientation = 'l';
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                dir.setX(1);
+                if (orientation == 'l')
+                    speed = 8;
+                if (onGround()) {
+                    orientation = 'r';
+                }
+            } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
+                if (jumpCount == 1)
+                    dir.setY(0);
+                dir.incrementY(-jumpHeight);
+                jumpCount--;
+            } 
         }
 
         attackHandler(e);
     }
 
-    public void tick() {
-        ticks++;
+   
+
+    // prevent user input during attack animation 
+    private void attackHandler(KeyEvent e) {
+        if (!attacking && e.getKeyCode() == KeyEvent.VK_O) {
+            attacking = true;
+            swordBeam.launch();
+        }
     }
 
-    private void attackHandler(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_Q) {
-            start = ticks;
-        }
+    private void attackAnimate () {
+
     }
 
     public void keyReleased(KeyEvent e) {
@@ -186,6 +196,11 @@ public class Player extends Sprite {
         }
     }
 
+    public char getOrientation() {
+        return orientation;
+    }
+
+   
     public void update(Graphics g) {
         x += dir.getX() * speed;
 
@@ -201,6 +216,13 @@ public class Player extends Sprite {
 
         drawSprite(g);
         speed_accel();
+
+        if (attacking && ticks < 20) 
+            ticks++;
+        if (ticks == 20) {
+            ticks = 0;
+            attacking = false;
+        }
     }
 
     public void drawSprite(Graphics g) {
@@ -209,6 +231,8 @@ public class Player extends Sprite {
         if (orientation == 'r')
             g.drawImage(image, x - xShiftR, y - yShift, 160, 125, null);
         else
-            g.drawImage(image, x + 125 - xShiftL, y - yShift, -160, 125, null);
+            g.drawImage(image, x + 125 - xShiftL, y - yShift, -160, 125, null);    
+
+        swordBeam.draw(g);
     }
 }
