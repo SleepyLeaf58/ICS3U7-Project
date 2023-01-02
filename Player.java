@@ -37,6 +37,11 @@ public class Player extends Sprite {
 
     private char move;
 
+    // Timer for abilities
+    private int ticks = 0;
+    private int start;
+    private int end;
+
     public Player(int x, int y, ArrayList<Tile> tileMap) {
         super(x, y, 45, 70);
         this.tileMap = tileMap;
@@ -52,9 +57,11 @@ public class Player extends Sprite {
         jumping.load();
         falling.load();
         slashing.load();
+
     }
 
     public void keyPressed(KeyEvent e) {
+        // Movement Handling
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             dir.setX(-1);
             if (orientation == 'r')
@@ -73,6 +80,18 @@ public class Player extends Sprite {
                 dir.setY(0);
             dir.incrementY(-jumpHeight);
             jumpCount--;
+        }
+
+        attackHandler(e);
+    }
+
+    public void tick() {
+        ticks++;
+    }
+
+    private void attackHandler(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_Q) {
+            start = ticks;
         }
     }
 

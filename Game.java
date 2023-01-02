@@ -37,5 +37,8 @@ public class Game {
         for (Sprite sprite : sprites) {
             sprite.update(g);
         }
+        for (Player player : activeSprites) {
+            player.tick();
+        }
     }
 }
