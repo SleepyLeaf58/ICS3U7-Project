@@ -6,7 +6,6 @@ import java.util.*;
 public class Game {
     private Map map;
     private ArrayList<Tile> tileMap;
-    private Player player;
     private ArrayList<Player> activeSprites = new ArrayList<Player>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
@@ -14,8 +13,9 @@ public class Game {
         map = new Map("Levels/Level.txt");
         map.setupMap();
         tileMap = map.getTileMap();
-        player = new Player(400, 400, tileMap);
-        activeSprites.add(player);
+        activeSprites.add(new Player(400, 400, tileMap));
+        activeSprites.add(new Player(600, 600, tileMap));
+        activeSprites.add(new Player(800, 800, tileMap));
 
         sprites.addAll(tileMap);
         sprites.addAll(activeSprites);
@@ -36,9 +36,6 @@ public class Game {
     public void run(Graphics g) {
         for (Sprite sprite : sprites) {
             sprite.update(g);
-        }
-        for (Player player : activeSprites) {
-            player.tick();
         }
     }
 }
