@@ -28,19 +28,22 @@ public class Player extends Sprite {
     private Animation jumping;
     private Animation falling;
     private Animation slashing;
+    private Animation runSlashing;
+    private Animation airSlashing;
 
-    private char orientation;
+    private char orientation = 'l';
     private String status;
     private final int xShiftR = 50;
     private final int xShiftL = 30;
     private final int yShift = 50;
 
-    private char move;
+    private boolean attacking = false;
+    private boolean specAttacking = false;
 
     // Timer for abilities
     private int ticks = 0;
-    private int start;
-    private int end;
+
+    private Projectile swordBeam;
 
     public Player(int x, int y, ArrayList<Tile> tileMap) {
         super(x, y, 45, 70);
@@ -51,47 +54,53 @@ public class Player extends Sprite {
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
         slashing = new Animation("Images/Player/Slashing/Slashing_", 20);
+        runSlashing = new Animation("Images/Player/Run_Slashing/Run_Slashing_", 21);
+        airSlashing = new Animation("Images/Player/Air_Slash/Air_Slash_", 20);
+        swordBeam = new Projectile(this, 40, 75, 8, 0.5, "Images/Player/swordBeam");
 
         idle.load();
         running.load();
         jumping.load();
         falling.load();
         slashing.load();
-
+        runSlashing.load();
+        airSlashing.load();
     }
 
     public void keyPressed(KeyEvent e) {
-        // Movement Handling
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            dir.setX(-1);
-            if (orientation == 'r')
-                speed = 8;
-            if (onGround())
-                orientation = 'l';
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            dir.setX(1);
-            if (orientation == 'l')
-                speed = 8;
-            if (onGround()) {
-                orientation = 'r';
+        if (!attacking) {
+            // Movement Handling
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                dir.setX(-1);
+                if (orientation == 'r')
+                    speed = 8;
+                if (onGround())
+                    orientation = 'l';
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                dir.setX(1);
+                if (orientation == 'l')
+                    speed = 8;
+                if (onGround()) {
+                    orientation = 'r';
+                }
+            } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
+                if (jumpCount == 1)
+                    dir.setY(0);
+                dir.incrementY(-jumpHeight);
+                jumpCount--;
             }
-        } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
-            if (jumpCount == 1)
-                dir.setY(0);
-            dir.incrementY(-jumpHeight);
-            jumpCount--;
         }
 
         attackHandler(e);
     }
 
-    public void tick() {
-        ticks++;
-    }
-
+    // prevent user input during attack animation
     private void attackHandler(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_Q) {
-            start = ticks;
+        if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == KeyEvent.VK_W) {
+            specAttacking = true;
+            swordBeam.launch();
+        } else if (!attacking && e.getKeyCode() == KeyEvent.VK_Q) {
+            attacking = true;
         }
     }
 
@@ -100,19 +109,27 @@ public class Player extends Sprite {
             dir.setX(0);
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             dir.setX(0);
-
     }
 
     private void getStatus() {
         if (dir.getY() > 0)
-            status = "fall";
+            if (attacking)
+                status = "airslash";
+            else
+                status = "fall";
         else if (dir.getY() < 0)
-            status = "jump";
+            if (attacking)
+                status = "airslash";
+            else
+                status = "jump";
         else {
             if (dir.getX() != 0)
-                status = "run";
+                if (attacking)
+                    status = "runslash";
+                else
+                    status = "run";
             else {
-                if (move == '1')
+                if (attacking)
                     status = "slash";
                 else
                     status = "idle";
@@ -183,7 +200,15 @@ public class Player extends Sprite {
 
         else if (status.equals("slash")) {
             image = slashing.getNextFrame(false);
+        } else if (status.equals("runslash")) {
+            image = runSlashing.getNextFrame(false);
+        } else if (status.equals("airslash")) {
+            image = airSlashing.getNextFrame(false);
         }
+    }
+
+    public char getOrientation() {
+        return orientation;
     }
 
     public void update(Graphics g) {
@@ -201,6 +226,17 @@ public class Player extends Sprite {
 
         drawSprite(g);
         speed_accel();
+
+        if ((specAttacking || attacking) && ticks < 20)
+            ticks++;
+        if (ticks == 20) {
+            ticks = 0;
+            attacking = false;
+            specAttacking = false;
+            slashing.setCnt(0);
+            runSlashing.setCnt(0);
+            airSlashing.setCnt(0);
+        }
     }
 
     public void drawSprite(Graphics g) {
@@ -210,5 +246,7 @@ public class Player extends Sprite {
             g.drawImage(image, x - xShiftR, y - yShift, 160, 125, null);
         else
             g.drawImage(image, x + 125 - xShiftL, y - yShift, -160, 125, null);
+
+        swordBeam.draw(g);
     }
 }

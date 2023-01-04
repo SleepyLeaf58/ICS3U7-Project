@@ -4,29 +4,75 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-public class Projectile {
-    private BufferedImage img = null;
+public class Projectile extends Sprite {
     private Player p;
-    private int vel, x, y;
+    private double speed;
+    private double accel;
+    private Image img;
+    private boolean launched = false;
+    private char orientation;
 
-    public Projectile(String path, int vel, Player p) {
-        this.vel = vel;
+    // used for drawing
+    private double d_speed;
+    private double d_accel;
+    private int d_width;
+
+    public Projectile(Player p, int width, int height, double speed, double accel, String filePath) {
+        super(0, 0, width, height);
         this.p = p;
-
-        this.x = p.getX() + 50;
-        this.y = p.getY();
+        this.speed = speed;
+        this.accel = accel;
 
         try {
-            img = ImageIO.read(new File(path));
+            img = ImageIO.read(new File(filePath + ".png"));
         } catch (Exception e) {
-            System.out.println("Error " + e);
+            System.out.println(e);
+        }
+
+        setVisible(false);
+    }
+
+    public void launch() {
+        launched = true;
+        if (!visible) {
+            setVisible(true);
+
+            x = p.getX() + 50;
+            y = p.getY();
+
+            if (p.getOrientation() == 'l') {
+                d_speed = -speed;
+                d_accel = -accel;
+                d_width = width;
+            } else {
+                d_speed = speed;
+                d_accel = accel;
+                d_width = width;
+            }
         }
     }
 
-    public void drawProjectile(Graphics g) {
-        g.drawImage(img, x, y, 100, 125, null);
-        while (x < 1024)
-            x += vel;
+    public void draw(Graphics g) {
+        g.setColor(Color.red);
+        if (visible) {
+            if (p.getOrientation() == 'r') {
+                g.drawImage(img, x, y, d_width, height, null);
+                g.drawRect(x, y, d_width, height);
+            } else {
+                g.drawImage(img, x, y, -d_width, height, null);
+                g.drawRect(x - d_width, y, d_width, height);
+            }
+        }
+
+        update();
     }
 
+    private void update() {
+        if (x < 1224 || x > -200)
+            x += d_speed;
+        d_speed += d_accel;
+
+        if (launched)
+            setVisible(x > -200 && x < 1224);
+    }
 }
