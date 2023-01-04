@@ -1,5 +1,5 @@
 import java.awt.*;
-import javax.swing.*;
+
 public class Sprite {
     protected int x;
     protected int y;

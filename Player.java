@@ -21,7 +21,9 @@ public class Player extends Sprite {
     private int jumpCount = 2;
 
     private Vector2 dir = new Vector2();
-    private ArrayList<Tile> tileMap;
+    private ArrayList<Tile> platMap;
+    private ArrayList<Tile> stageMap;
+    private ArrayList<Tile> allMap = new ArrayList<Tile>();
 
     private Animation idle;
     private Animation running;
@@ -45,9 +47,12 @@ public class Player extends Sprite {
 
     private Projectile swordBeam;
 
-    public Player(int x, int y, ArrayList<Tile> tileMap) {
+    public Player(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap) {
         super(x, y, 45, 70);
-        this.tileMap = tileMap;
+        this.platMap = platMap;
+        this.stageMap = stageMap;
+        allMap.addAll(platMap);
+        allMap.addAll(stageMap);
 
         idle = new Animation("Images/Player/Idle/Idle_", 32);
         running = new Animation("Images/Player/Running/Running_", 24);
@@ -68,7 +73,7 @@ public class Player extends Sprite {
     }
 
     public void keyPressed(KeyEvent e) {
-        if (!attacking) {
+        if (!specAttacking) {
             // Movement Handling
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 dir.setX(-1);
@@ -138,10 +143,19 @@ public class Player extends Sprite {
     }
 
     private void verticalCollisions() {
-        for (Tile tile : tileMap) {
+        for (Tile tile : allMap) {
             if (getBounds().intersects(tile.getBounds())) {
-                if (dir.getY() > 0) {
+                if (dir.getY() > 0 && y + 70 - tile.getTTop() < dir.getY() + 1) {
                     y = tile.getTTop() - 70;
+                    dir.setY(0);
+                }
+            }
+        }
+
+        for (Tile tile : stageMap) {
+            if (getBounds().intersects(tile.getBounds())) {
+                if (dir.getY() < 0) {
+                    y = tile.getTBot();
                     dir.setY(0);
                 }
             }
@@ -149,8 +163,13 @@ public class Player extends Sprite {
     }
 
     private void horizontalCollisions() {
-        for (Tile tile : tileMap) {
+        for (Tile tile : stageMap) {
             if (getBounds().intersects(tile.getBounds())) {
+                if (dir.getX() < 0) {
+                    x = tile.getTRight();
+                } else if (dir.getX() > 0) {
+                    x = tile.getTLeft() - 45;
+                }
             }
         }
     }
@@ -167,7 +186,7 @@ public class Player extends Sprite {
     }
 
     private boolean onGround() {
-        for (Tile tile : tileMap) {
+        for (Tile tile : allMap) {
             if (y == tile.getTTop() - 70) {
                 jumpCount = 2;
                 return true;
@@ -221,6 +240,7 @@ public class Player extends Sprite {
         if (!onGround() && jumpCount == 2)
             jumpCount--;
 
+        horizontalCollisions();
         applyGravity();
         verticalCollisions();
 

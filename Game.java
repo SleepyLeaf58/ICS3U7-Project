@@ -5,17 +5,20 @@ import java.util.*;
 
 public class Game {
     private Map map;
-    private ArrayList<Tile> tileMap;
+    private ArrayList<Tile> platMap;
+    private ArrayList<Tile> stageMap;
     private ArrayList<Player> activeSprites = new ArrayList<Player>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
     public Game() {
         map = new Map("Levels/Level.txt");
         map.setupMap();
-        tileMap = map.getTileMap();
-        activeSprites.add(new Player(400, 400, tileMap));
+        platMap = map.getPlatMap();
+        stageMap = map.getStageMap();
+        activeSprites.add(new Player(400, 400, platMap, stageMap));
 
-        sprites.addAll(tileMap);
+        sprites.addAll(platMap);
+        sprites.addAll(stageMap);
         sprites.addAll(activeSprites);
     }
 
