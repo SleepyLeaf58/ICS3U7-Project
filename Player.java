@@ -42,7 +42,6 @@ public class Player extends Sprite {
     // Timer for abilities
     private int ticks = 0;
 
-
     private Projectile swordBeam;
 
     public Player(int x, int y, ArrayList<Tile> tileMap) {
@@ -90,8 +89,6 @@ public class Player extends Sprite {
 
         attackHandler(e);
     }
-
-   
 
     // prevent user input during attack animation 
     private void attackHandler(KeyEvent e) {
@@ -200,7 +197,6 @@ public class Player extends Sprite {
         return orientation;
     }
 
-   
     public void update(Graphics g) {
         x += dir.getX() * speed;
 

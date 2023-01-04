@@ -37,7 +37,6 @@ public class Projectile extends Sprite {
             x = p.getX() + 50;
             y = p.getY();
 
-            
             if (p.getOrientation() == 'l') {
                 d_accel = -accel;
                 d_width = -width;
@@ -46,8 +45,6 @@ public class Projectile extends Sprite {
                 d_width = width;
             }
         }
-        
-
     }
 
     public void draw (Graphics g) {
@@ -70,8 +67,5 @@ public class Projectile extends Sprite {
         
         if (launched)
             setVisible(x > -200 && x < 1224);
-            
-        
     }
-
 }
