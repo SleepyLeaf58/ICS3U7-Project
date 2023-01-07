@@ -5,7 +5,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 public class Projectile extends Sprite {
-    private Player p;
+    private Entity p;
     private double speed;
     private double accel;
     private Image img;
@@ -17,7 +17,7 @@ public class Projectile extends Sprite {
     private double d_accel;
     private int d_width;
 
-    public Projectile(Player p, int width, int height, double speed, double accel, String filePath) {
+    public Projectile(Entity p, int width, int height, double speed, double accel, String filePath) {
         super(0, 0, width, height);
         this.p = p;
         this.speed = speed;

@@ -7,7 +7,7 @@ public class Game {
     private Map map;
     private ArrayList<Tile> platMap;
     private ArrayList<Tile> stageMap;
-    private ArrayList<Player> activeSprites = new ArrayList<Player>();
+    private ArrayList<Entity> activeSprites = new ArrayList<Entity>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
     public Game() {
@@ -15,7 +15,8 @@ public class Game {
         map.setupMap();
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
-        activeSprites.add(new Player(400, 400, platMap, stageMap));
+        activeSprites.add(new Warrior(400, 400, platMap, stageMap));
+        activeSprites.add(new Dummy(600, 400, platMap, stageMap));
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);
@@ -23,14 +24,14 @@ public class Game {
     }
 
     public void keyPressed(KeyEvent key) {
-        for (Player player : activeSprites) {
-            player.keyPressed(key);
+        for (Entity entity : activeSprites) {
+            entity.keyPressed(key);
         }
     }
 
     public void keyReleased(KeyEvent key) {
-        for (Player player : activeSprites) {
-            player.keyReleased(key);
+        for (Entity entity : activeSprites) {
+            entity.keyReleased(key);
         }
     }
 
