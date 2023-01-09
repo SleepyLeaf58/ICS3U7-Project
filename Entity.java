@@ -48,6 +48,14 @@ public class Entity extends Sprite {
     public void keyReleased(KeyEvent e) {
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     private void verticalCollisions() {
         for (Tile tile : allMap) {
             if (getBounds().intersects(tile.getBounds())) {

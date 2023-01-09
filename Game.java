@@ -1,3 +1,4 @@
+import javax.smartcardio.CardException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -5,6 +6,7 @@ import java.util.*;
 
 public class Game {
     private Map map;
+    private Camera camera;
     private ArrayList<Tile> platMap;
     private ArrayList<Tile> stageMap;
     private ArrayList<Entity> activeSprites = new ArrayList<Entity>();
@@ -17,6 +19,7 @@ public class Game {
         stageMap = map.getStageMap();
         activeSprites.add(new Warrior(400, 400, platMap, stageMap));
         activeSprites.add(new Dummy(600, 400, platMap, stageMap));
+        camera = new Camera(activeSprites);
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);
@@ -39,5 +42,6 @@ public class Game {
         for (Sprite sprite : sprites) {
             sprite.update(g);
         }
+        camera.update(g);
     }
 }
