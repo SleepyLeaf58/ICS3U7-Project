@@ -12,9 +12,11 @@ public class Map {
     private ArrayList<char[]> mapArr = new ArrayList<char[]>();
     private ArrayList<Tile> platMap = new ArrayList<Tile>();
     private ArrayList<Tile> stageMap = new ArrayList<Tile>();
+    private Camera c;
 
-    public Map(String filePath) {
+    public Map(String filePath, Camera c) {
         loadMap(filePath);
+        this.c = c;
     }
 
     public void loadMap(String filePath) {
@@ -37,10 +39,10 @@ public class Map {
             for (int col = 0; col < mapArr.get(row).length; col++) {
                 if (mapArr.get(row)[col] == 'P') {
                     platMap.add(
-                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift));
+                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift, c));
                 } else if (mapArr.get(row)[col] == 'S') {
                     stageMap.add(
-                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift));
+                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift, c));
                 }
             }
         }

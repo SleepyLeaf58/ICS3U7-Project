@@ -4,8 +4,8 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class Dummy extends Entity {
-    public Dummy(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap) {
-        super(x, y, 45, 74, 45, 74, platMap, stageMap);
+    public Dummy(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c) {
+        super(x, y, 45, 74, 45, 74, platMap, stageMap, c);
 
         percent = 0;
         orientation = 'r';

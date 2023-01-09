@@ -7,12 +7,14 @@ public class Sprite {
     protected int height;
     protected boolean visible;
     protected Image image;
+    protected Camera c;
 
-    public Sprite(int x, int y, int width, int height) {
+    public Sprite(int x, int y, int width, int height, Camera c) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.c = c;
         visible = true;
     }
 

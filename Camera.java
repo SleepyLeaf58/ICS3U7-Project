@@ -1,8 +1,6 @@
 import java.util.*;
 import java.awt.*;
 
-import javafx.scene.shape.Rectangle;
-
 public class Camera {
     private ArrayList<Entity> players;
     private Rectangle bounds;
@@ -15,6 +13,8 @@ public class Camera {
 
     private int cameraX = 512;
     private int cameraY = 384;
+    private int posShiftX = 512;
+    private int posShiftY = 384;
     private double cameraZoom = 1;
 
     private int targetX;
@@ -30,10 +30,10 @@ public class Camera {
         int pX = 0, pY = 0;
 
         for (Entity p : players) {
+
             if (!bounds.contains(p.getX(), p.getY())) {
                 pX = clamp(p.getX(), 0, 1024);
                 pY = clamp(p.getX(), 0, 768);
-                System.out.println("a");
             } else {
                 pX = p.getX();
                 pY = p.getY();
@@ -54,25 +54,37 @@ public class Camera {
 
     private void move() {
         // Updating X
-        if (targetX - cameraX > 5) {
-            cameraX += positionUpdateSpeed;
-        } else if (cameraY - targetY < 5) {
-            cameraX -= positionUpdateSpeed;
+        if (targetX - posShiftX > 5) {
+            posShiftX += positionUpdateSpeed;
+        } else if (targetX - posShiftX < -5) {
+            posShiftX -= positionUpdateSpeed;
         }
 
         // Updating Y
-        if (targetY - cameraY > 5) {
-            cameraY += positionUpdateSpeed;
-        } else if (cameraY - targetY < 5) {
-            cameraY -= positionUpdateSpeed;
+
+        if (targetY - posShiftY > 5) {
+            posShiftY += positionUpdateSpeed;
+        } else if (targetY - posShiftY < -5) {
+            posShiftY -= positionUpdateSpeed;
         }
+
+    }
+
+    public int getPosShiftX() {
+        return -(posShiftX - 512);
+    }
+
+    public int getPosShiftY() {
+        return -(posShiftY - 384);
     }
 
     public void update(Graphics g) {
+        System.out.println(targetX + " " + targetY + " " + posShiftX + " " + posShiftY + " " + getPosShiftX() + " "
+                + getPosShiftY());
         calculateLocation();
         move();
+        bounds = new Rectangle(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
         g.setColor(Color.blue);
-        g.fillOval(cameraX, cameraY, 25, 25);
-        System.out.println(targetX + " " + targetY + " " + cameraX + " " + cameraY);
+        g.drawRect(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
     }
 }

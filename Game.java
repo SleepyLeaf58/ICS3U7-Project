@@ -13,13 +13,13 @@ public class Game {
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
     public Game() {
-        map = new Map("Levels/Level.txt");
+        camera = new Camera(activeSprites);
+        map = new Map("Levels/Level.txt", camera);
         map.setupMap();
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
-        activeSprites.add(new Warrior(400, 400, platMap, stageMap));
-        activeSprites.add(new Dummy(600, 400, platMap, stageMap));
-        camera = new Camera(activeSprites);
+        activeSprites.add(new Warrior(400, 400, platMap, stageMap, camera));
+        activeSprites.add(new Dummy(600, 400, platMap, stageMap, camera));
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);

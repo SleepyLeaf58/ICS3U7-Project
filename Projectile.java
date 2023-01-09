@@ -17,8 +17,8 @@ public class Projectile extends Sprite {
     private double d_accel;
     private int d_width;
 
-    public Projectile(Entity p, int width, int height, double speed, double accel, String filePath) {
-        super(0, 0, width, height);
+    public Projectile(Entity p, int width, int height, double speed, double accel, String filePath, Camera c) {
+        super(0, 0, width, height, c);
         this.p = p;
         this.speed = speed;
         this.accel = accel;

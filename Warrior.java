@@ -22,8 +22,8 @@ public class Warrior extends Entity {
     // Timer for attacks
     private int ticks = 0;
 
-    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap) {
-        super(x, y, 45, 70, 160, 125, platMap, stageMap);
+    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c) {
+        super(x, y, 45, 70, 160, 125, platMap, stageMap, c);
 
         percent = 0;
         speed = 8;
@@ -40,7 +40,7 @@ public class Warrior extends Entity {
         slashing = new Animation("Images/Player/Slashing/Slashing_", 20);
         runSlashing = new Animation("Images/Player/Run_Slashing/Run_Slashing_", 21);
         airSlashing = new Animation("Images/Player/Air_Slash/Air_Slash_", 20);
-        swordBeam = new Projectile(this, 40, 75, 8, 0.5, "Images/Player/swordBeam");
+        swordBeam = new Projectile(this, 40, 75, 8, 0.5, "Images/Player/swordBeam", c);
 
         idle.load();
         running.load();

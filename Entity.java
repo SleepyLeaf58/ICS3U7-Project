@@ -31,13 +31,18 @@ public class Entity extends Sprite {
     protected int xShiftL;
     protected int yShift;
 
+    protected Camera c;
+
+    protected int drawX = 0, drawY = 0;
+
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
-            ArrayList<Tile> stageMap) {
-        super(x, y, width, height);
+            ArrayList<Tile> stageMap, Camera c) {
+        super(x, y, width, height, c);
         this.platMap = platMap;
         this.stageMap = stageMap;
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
+        this.c = c;
         allMap.addAll(platMap);
         allMap.addAll(stageMap);
     }
@@ -112,6 +117,9 @@ public class Entity extends Sprite {
     }
 
     public void update(Graphics g) {
+        drawX = x + c.getPosShiftX();
+        drawY = y + c.getPosShiftY();
+
         // Only allows for 1 midair jump
         if (!onGround() && jumpCount == 2)
             jumpCount--;
@@ -125,10 +133,10 @@ public class Entity extends Sprite {
 
     public void drawSprite(Graphics g) {
         g.setColor(Color.red);
-        g.drawRect(x, y, width, height);
+        g.drawRect(drawX, drawY, width, height);
         if (orientation == 'r')
-            g.drawImage(image, x - xShiftR, y - yShift, imgWidth, imgHeight, null);
+            g.drawImage(image, drawX - xShiftR, drawY - yShift, imgWidth, imgHeight, null);
         else
-            g.drawImage(image, x + 125 - xShiftL, y - yShift, -imgWidth, imgHeight, null);
+            g.drawImage(image, drawX + 125 - xShiftL, drawY - yShift, -imgWidth, imgHeight, null);
     }
 }

@@ -6,9 +6,10 @@ public class Tile extends Sprite {
     private static final int TILE_WIDTH = 50;
     private static final int TILE_HEIGHT = 30;
     int tTop, tBot, tLeft, tRight;
+    int drawX = 0, drawY = 0;
 
-    public Tile(int x, int y) {
-        super(x, y, TILE_WIDTH, TILE_HEIGHT);
+    public Tile(int x, int y, Camera c) {
+        super(x, y, TILE_WIDTH, TILE_HEIGHT, c);
         tTop = y;
         tBot = y + TILE_HEIGHT;
         tLeft = x;
@@ -40,10 +41,12 @@ public class Tile extends Sprite {
     }
 
     public void update(Graphics g) {
+        drawX = x + c.getPosShiftX();
+        drawY = y + c.getPosShiftY();
         drawSprite(g);
     }
 
     public void drawSprite(Graphics g) {
-        g.fillRect(x, y, TILE_WIDTH, TILE_HEIGHT);
+        g.fillRect(drawX, drawY, TILE_WIDTH, TILE_HEIGHT);
     }
 }
