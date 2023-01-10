@@ -1,17 +1,22 @@
+
 /*
 
  */
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+
 public class Map {
     private final int xMapShift = 162;
     private final int yMapShift = 200;
-    private String filePath;
     private ArrayList<char[]> mapArr = new ArrayList<char[]>();
-    private ArrayList<Tile> tileMap = new ArrayList<Tile>();
-    public Map(String filePath) {
+    private ArrayList<Tile> platMap = new ArrayList<Tile>();
+    private ArrayList<Tile> stageMap = new ArrayList<Tile>();
+    private Camera c;
+
+    public Map(String filePath, Camera c) {
         loadMap(filePath);
+        this.c = c;
     }
 
     public void loadMap(String filePath) {
@@ -23,24 +28,31 @@ public class Map {
             while ((line = br.readLine()) != null) {
                 mapArr.add(line.toCharArray());
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error " + e);
         }
     }
 
     public void setupMap() {
-        //Work on Enumerating level next
+        // Work on Enumerating level next
         for (int row = 0; row < mapArr.size(); row++) {
             for (int col = 0; col < mapArr.get(row).length; col++) {
-                if (mapArr.get(row)[col] == 'X') {
-                    tileMap.add(new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift));
+                if (mapArr.get(row)[col] == 'P') {
+                    platMap.add(
+                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift, c));
+                } else if (mapArr.get(row)[col] == 'S') {
+                    stageMap.add(
+                            new Tile(col * Tile.getTileWidth() + xMapShift, row * Tile.getTileHeight() + yMapShift, c));
                 }
             }
         }
     }
 
-    public ArrayList<Tile> getTileMap() {
-        return tileMap;
+    public ArrayList<Tile> getPlatMap() {
+        return platMap;
+    }
+
+    public ArrayList<Tile> getStageMap() {
+        return stageMap;
     }
 }

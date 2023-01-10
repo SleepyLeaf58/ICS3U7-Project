@@ -5,7 +5,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 public class Projectile extends Sprite {
-    private Player p;
+    private Entity p;
     private double speed;
     private double accel;
     private Image img;
@@ -16,9 +16,10 @@ public class Projectile extends Sprite {
     private double d_speed;
     private double d_accel;
     private int d_width;
+    private int drawX = 0, drawY = 0;
 
-    public Projectile(Player p, int width, int height, double speed, double accel, String filePath) {
-        super(0, 0, width, height);
+    public Projectile(Entity p, int width, int height, double speed, double accel, String filePath, Camera c) {
+        super(0, 0, width, height, c);
         this.p = p;
         this.speed = speed;
         this.accel = accel;
@@ -39,6 +40,9 @@ public class Projectile extends Sprite {
 
             x = p.getX() + 50;
             y = p.getY();
+            drawX = p.getDrawX();
+            drawY = p.getDrawY();
+
 
             if (p.getOrientation() == 'l') {
                 d_speed = -speed;
@@ -56,11 +60,11 @@ public class Projectile extends Sprite {
         g.setColor(Color.red);
         if (visible) {
             if (p.getOrientation() == 'r') {
-                g.drawImage(img, x, y, d_width, height, null);
-                g.drawRect(x, y, d_width, height);
+                g.drawImage(img, drawX, drawY, d_width, height, null);
+                g.drawRect(drawX, drawY, d_width, height);
             } else {
-                g.drawImage(img, x, y, -d_width, height, null);
-                g.drawRect(x - d_width, y, d_width, height);
+                g.drawImage(img, drawX, drawY, -d_width, height, null);
+                g.drawRect(drawX - d_width, drawY, d_width, height);
             }
         }
 
@@ -70,7 +74,10 @@ public class Projectile extends Sprite {
     private void update() {
         if (x < 1224 || x > -200)
             x += d_speed;
+            drawX += d_speed;
         d_speed += d_accel;
+
+        drawY = y + c.getPosShiftY();
 
         if (launched)
             setVisible(x > -200 && x < 1224);
