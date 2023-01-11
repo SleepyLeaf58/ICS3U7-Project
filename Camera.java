@@ -30,8 +30,8 @@ public class Camera {
         int pX = 0, pY = 0;
 
         for (Entity p : players) {
-
             if (!bounds.contains(p.getX(), p.getY())) {
+                System.out.println("not");
                 pX = clamp(p.getX(), 0, 1024);
                 pY = clamp(p.getX(), 0, 768);
             } else {
@@ -79,12 +79,12 @@ public class Camera {
     }
 
     public void update(Graphics g) {
+        bounds = new Rectangle(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
+        g.setColor(Color.blue);
+        g.drawRect(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
         System.out.println(targetX + " " + targetY + " " + posShiftX + " " + posShiftY + " " + getPosShiftX() + " "
                 + getPosShiftY());
         calculateLocation();
         move();
-        bounds = new Rectangle(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
-        g.setColor(Color.blue);
-        g.drawRect(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
     }
 }
