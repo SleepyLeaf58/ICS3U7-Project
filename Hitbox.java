@@ -2,16 +2,18 @@ import java.awt.*;
 import java.util.*;
 
 public class Hitbox {
-    private int x, y, radius, baseKB, KBgrowth, angle, damage;
+	private int x, y;
+    private int xShift, yShift, radius, baseKB, KBgrowth, angle, damage, index;
 
-    public Hitbox(ArrayList<Integer> data) {
-        x = data.get(0);
-        y = data.get(1);
-        radius = data.get(2);
-        baseKB = data.get(3);
-        KBgrowth = data.get(4);
-        angle = data.get(5);
-        damage = data.get(7);
+    public Hitbox(int[] data) {
+        xShift = data[0];
+        yShift = data[1];
+        radius = data[2];
+        baseKB = data[3];
+        KBgrowth = data[4];
+        angle = data[5];
+        damage = data[6];
+        index = data[7];
     }
 
     // Source: https://yal.cc/rectangle-circle-intersection-test/comment-page-1/
@@ -21,9 +23,18 @@ public class Hitbox {
         return (deltaX * deltaX + deltaY * deltaY) < (radius * radius);
     }
 
-    public void apply_kb(Entity p) {
-
+    public void apply_kb(Player p) {
+        
     }
+    
+    public void incrementX(int val) {
+    	x = val;
+    }
+    
+    public void incrementY(int val) {
+    	y = val;
+    }
+
 
     public void draw(Graphics g) {
         g.fillOval(x, y, radius, radius);
