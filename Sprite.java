@@ -9,6 +9,7 @@ public class Sprite {
     protected Image image;
     protected Camera c;
 
+
     public Sprite(int x, int y, int width, int height, Camera c) {
         this.x = x;
         this.y = y;

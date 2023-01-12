@@ -1,6 +1,7 @@
 import java.util.*;
 import java.awt.*;
 
+// Still need to fix twitching camera bug
 public class Camera {
     private ArrayList<Entity> players;
     private Rectangle bounds;
@@ -11,8 +12,6 @@ public class Camera {
     private double depthMax = -10;
     private double depthMin = -22;
 
-    private int cameraX = 512;
-    private int cameraY = 384;
     private int posShiftX = 512;
     private int posShiftY = 384;
     private double cameraZoom = 1;
@@ -31,9 +30,8 @@ public class Camera {
 
         for (Entity p : players) {
             if (!bounds.contains(p.getX(), p.getY())) {
-                System.out.println("not");
                 pX = clamp(p.getX(), 0, 1024);
-                pY = clamp(p.getX(), 0, 768);
+                pY = clamp(p.getY(), 0, 768);
             } else {
                 pX = p.getX();
                 pY = p.getY();
@@ -44,6 +42,10 @@ public class Camera {
         }
         targetX = totalX / players.size();
         targetY = totalY / players.size();
+    }
+
+    private void calculateZoom() {
+
     }
 
     // General function that clamps the values for a integer within a specified
@@ -82,8 +84,6 @@ public class Camera {
         bounds = new Rectangle(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
         g.setColor(Color.blue);
         g.drawRect(0 + getPosShiftX(), 0 + getPosShiftY(), 1024, 768);
-        System.out.println(targetX + " " + targetY + " " + posShiftX + " " + posShiftY + " " + getPosShiftX() + " "
-                + getPosShiftY());
         calculateLocation();
         move();
     }

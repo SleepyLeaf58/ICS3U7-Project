@@ -4,23 +4,26 @@ import java.util.*;
 
 public class Warrior extends Entity {
 
-    private Animation idle;
-    private Animation running;
-    private Animation jumping;
-    private Animation falling;
-    private Animation slashing;
-    private Animation runSlashing;
-    private Animation airSlashing;
+    protected Animation idle;
+    protected Animation running;
+    protected Animation jumping;
+    protected Animation falling;
+    protected Animation slashing;
+    protected Animation runSlashing;
+    protected Animation airSlashing;
 
-    private String status;
+    protected String status;
 
-    private boolean attacking = false;
-    private boolean specAttacking = false;
+    protected boolean attacking = false;
+    protected boolean specAttacking = false;
 
-    private Projectile swordBeam;
+    // protected int jumpCap = -20; // Added to fix issues with subclasses jumping
+    // twice the height
+
+    protected Projectile swordBeam;
 
     // Timer for attacks
-    private int ticks = 0;
+    protected int ticks = 0;
 
     public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c) {
         super(x, y, 45, 70, 160, 125, platMap, stageMap, c);
@@ -79,7 +82,7 @@ public class Warrior extends Entity {
     }
 
     // prevent user input during attack animation
-    private void attackHandler(KeyEvent e) {
+    protected void attackHandler(KeyEvent e) {
         if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == KeyEvent.VK_W) {
             specAttacking = true;
             swordBeam.launch();
@@ -95,7 +98,7 @@ public class Warrior extends Entity {
             dir.setX(0);
     }
 
-    private void speed_accel() {
+    protected void speed_accel() {
 
         if (onGround() && dir.getX() != 0) {
             if (speed < maxSpeed)
@@ -106,7 +109,7 @@ public class Warrior extends Entity {
         }
     }
 
-    private void getStatus() {
+    protected void getStatus() {
         if (dir.getY() > 0)
             if (attacking)
                 status = "airslash";
@@ -132,7 +135,7 @@ public class Warrior extends Entity {
         }
     }
 
-    private void animate() {
+    protected void animate() {
         if (status.equals("idle") && onGround()) {
             image = idle.getNextFrame(true);
             jumping.setCnt(0);

@@ -61,6 +61,14 @@ public class Entity extends Sprite {
         return y;
     }
 
+    public int getDrawX() {
+        return drawX;
+    }
+
+    public int getDrawY() {
+        return drawY;
+    }
+
     private void verticalCollisions() {
         for (Tile tile : allMap) {
             if (getBounds().intersects(tile.getBounds())) {
