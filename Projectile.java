@@ -43,7 +43,6 @@ public class Projectile extends Sprite {
             drawX = p.getDrawX();
             drawY = p.getDrawY();
 
-
             if (p.getOrientation() == 'l') {
                 d_speed = -speed;
                 d_accel = -accel;
@@ -74,7 +73,7 @@ public class Projectile extends Sprite {
     private void update() {
         if (x < 1224 || x > -200)
             x += d_speed;
-            drawX += d_speed;
+        drawX += d_speed;
         d_speed += d_accel;
 
         drawY = y + c.getPosShiftY();
