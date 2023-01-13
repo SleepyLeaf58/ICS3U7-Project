@@ -18,10 +18,10 @@ public class Game {
         map.setupMap();
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
-
-        Warrior w = new Warrior(200, 400, platMap, stageMap, camera);
+        
+        Warrior w = new Warrior(200, 400, platMap, stageMap, camera, new Color(255, 0, 0));
         activeSprites.add(w);
-        activeSprites.add(new Computer(700, 400, platMap, stageMap, camera, w));
+        activeSprites.add(new Computer(700, 400, platMap, stageMap, camera, new Color(0, 255, 0), w));
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);

@@ -24,10 +24,12 @@ public class Warrior extends Entity {
 
     // Timer for attacks
     protected int ticks = 0;
+    private Color color;
 
-    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c) {
+    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color) {
         super(x, y, 45, 70, 160, 125, platMap, stageMap, c);
 
+        this.color = color;
         percent = 0;
         speed = 8;
         accel = 0.15;
@@ -181,5 +183,7 @@ public class Warrior extends Entity {
             airSlashing.setCnt(0);
         }
         swordBeam.draw(g);
+        g.setColor(color);
+        g.fillPolygon(new int[] {drawX + 15, drawX + 35, drawX + 25}, new int[] {drawY - 35, drawY - 35, drawY - 20},3);
     }
 }

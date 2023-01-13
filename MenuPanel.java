@@ -14,7 +14,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 
 	public MenuPanel() {
 		setLayout(null);
-		menuAnimation = new Animation("Images/Player/Idle/Idle_", 32);
+		menuAnimation = new Animation("Images/Menu/Idle/Idle_", 32);
 		t = new Timer(120, this);
 
 		menuAnimation.load();
@@ -22,22 +22,30 @@ public class MenuPanel extends JPanel implements ActionListener {
 		t.start();
 
 		// Title
-		title = new JLabel("SMASH");
+		title = new JLabel(new ImageIcon("Images/Buttons/Smash.png"));
 		title.setBounds(655, 200, 300, 70);
-		title.setFont(new Font("Arial", Font.TRUETYPE_FONT, 80));
 
 		// Play Button
-		btnGame = new JButton("Play");
+		btnGame = new JButton(new ImageIcon("Images/Buttons/Play.png"));
+		btnGame.setBorderPainted(true);
+		btnGame.setFocusPainted(false);
+		btnGame.setContentAreaFilled(false);
 		btnGame.addActionListener(this);
 		btnGame.setBounds(650, 300, 300, 70);
 
 		// Instructions Button
-		btnInstructions = new JButton("Instructions");
+		btnInstructions = new JButton(new ImageIcon("Images/Buttons/Instructions.png"));
+		btnInstructions.setBorderPainted(true);
+		btnInstructions.setFocusPainted(false);
+		btnInstructions.setContentAreaFilled(false);
 		btnInstructions.addActionListener(this);
 		btnInstructions.setBounds(650, 400, 300, 70);
 
 		// Quit Button
-		btnQuit = new JButton("Quit");
+		btnQuit = new JButton(new ImageIcon("Images/Buttons/Quit.png"));
+		btnQuit.setBorderPainted(true);
+		btnQuit.setFocusPainted(false);
+		btnQuit.setContentAreaFilled(false);
 		btnQuit.addActionListener(this);
 		btnQuit.setBounds(650, 500, 300, 70);
 
