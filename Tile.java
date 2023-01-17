@@ -1,3 +1,7 @@
+/*
+ * Class creating tiles for the stage and platforms
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;

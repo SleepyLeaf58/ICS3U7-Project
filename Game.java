@@ -1,3 +1,7 @@
+/*
+
+*/
+
 import javax.smartcardio.CardException;
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +13,10 @@ public class Game {
     private Camera camera;
     private ArrayList<Tile> platMap;
     private ArrayList<Tile> stageMap;
+
+    private Warrior w;
+    private Computer c;
+    private Dummy d;
     private ArrayList<Entity> activeSprites = new ArrayList<Entity>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
@@ -18,10 +26,13 @@ public class Game {
         map.setupMap();
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
-        
-        Warrior w = new Warrior(200, 400, platMap, stageMap, camera, new Color(255, 0, 0));
+
+        w = new Warrior(200, 400, platMap, stageMap, camera, new Color(255, 0, 0));
         activeSprites.add(w);
-        activeSprites.add(new Computer(700, 400, platMap, stageMap, camera, new Color(0, 255, 0), w));
+        c = new Computer(700, 400, platMap, stageMap, camera, new Color(0, 255, 0), w);
+        activeSprites.add(c);
+        // d = new Dummy(200, 400, platMap, stageMap, camera);
+        // activeSprites.add(d);
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);
@@ -40,10 +51,31 @@ public class Game {
         }
     }
 
+    public void checkGetHit() {
+        for (Hitbox h : w.getHitboxes()) {
+            if (h.intersects(c.getBounds())) {
+                System.out.println("Jason Yuen got hit.");
+                c.applyKB(h, w.getOrientation());
+            }
+        }
+        /*
+         * for (Hitbox h : c.getHitboxes()) {
+         * if (h.intersects(w.getBounds())) {
+         * System.out.println("Warrior got hit.");
+         * ;
+         * w.applyKB(h, c.getOrientation());
+         * }
+         * }
+         */
+    }
+
     public void run(Graphics g) {
         for (Sprite sprite : sprites) {
+            checkGetHit();
             sprite.update(g);
         }
         camera.update(g);
+        System.out.println(c.getDir().getX() + " " + c.getDir().getY());
     }
+
 }

@@ -1,7 +1,6 @@
 import java.util.*;
 import java.awt.*;
 
-// Still need to fix twitching camera bug
 public class Camera {
     private ArrayList<Entity> players;
     private Rectangle bounds;
@@ -23,6 +22,10 @@ public class Camera {
         this.players = players;
         bounds = new Rectangle(0, 0, 1024, 768);
     }
+
+    // Calculates the average of the locations of the player, and calculates a
+    // corresponding x-shift and y-shift
+    // to create a camera that follows the players.
 
     private void calculateLocation() {
         int totalX = 0, totalY = 0;
@@ -63,7 +66,6 @@ public class Camera {
         }
 
         // Updating Y
-
         if (targetY - posShiftY > 5) {
             posShiftY += positionUpdateSpeed;
         } else if (targetY - posShiftY < -5) {
@@ -72,6 +74,9 @@ public class Camera {
 
     }
 
+    // Logic is done with normal x and y values, but the user sees the game
+    // outputted with a coordinate shift to create the
+    // illusion of a camera
     public int getPosShiftX() {
         return -(posShiftX - 512);
     }

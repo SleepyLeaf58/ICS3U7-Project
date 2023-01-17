@@ -73,6 +73,7 @@ public class Projectile extends Sprite {
     private void update() {
         if (x < 1224 || x > -200)
             x += d_speed;
+
         drawX += d_speed;
         d_speed += d_accel;
 
@@ -81,4 +82,5 @@ public class Projectile extends Sprite {
         if (launched)
             setVisible(x > -200 && x < 1224);
     }
+
 }

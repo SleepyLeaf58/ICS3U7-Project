@@ -1,6 +1,11 @@
+/*
+ * Warrior subclass of entity
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Warrior extends Entity {
 
@@ -8,11 +13,11 @@ public class Warrior extends Entity {
     protected Animation running;
     protected Animation jumping;
     protected Animation falling;
-    protected Animation slashing;
-    protected Animation runSlashing;
-    protected Animation airSlashing;
+    protected Attack slashing;
+    protected Attack runSlashing;
+    protected Attack airSlashing;
 
-    protected String status;
+    protected String status = "";
 
     protected boolean attacking = false;
     protected boolean specAttacking = false;
@@ -21,9 +26,11 @@ public class Warrior extends Entity {
     // twice the height
 
     protected Projectile swordBeam;
+    private ArrayList<Hitbox> activeHitboxes = new ArrayList<Hitbox>();
 
     // Timer for attacks
     protected int ticks = 0;
+    protected int tumble = 0;
     private Color color;
 
     public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color) {
@@ -42,9 +49,9 @@ public class Warrior extends Entity {
         running = new Animation("Images/Player/Running/Running_", 24);
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
-        slashing = new Animation("Images/Player/Slashing/Slashing_", 20);
-        runSlashing = new Animation("Images/Player/Run_Slashing/Run_Slashing_", 21);
-        airSlashing = new Animation("Images/Player/Air_Slash/Air_Slash_", 20);
+        slashing = new Attack(this, 11, 12, 20, "Images/Player/Slashing/Slashing_", "Data/Slashing.txt");
+        runSlashing = new Attack(this, 10, 12, 21, "Images/Player/Run_Slashing/Run_Slashing_", "Data/RunSlashing.txt");
+        airSlashing = new Attack(this, 9, 12, 20, "Images/Player/Air_Slash/Air_Slash_", "Data/AirSlashing.txt");
         swordBeam = new Projectile(this, 40, 75, 8, 0.5, "Images/Player/swordBeam", c);
 
         idle.load();
@@ -54,6 +61,7 @@ public class Warrior extends Entity {
         slashing.load();
         runSlashing.load();
         airSlashing.load();
+
     }
 
     public void keyPressed(KeyEvent e) {
@@ -100,6 +108,7 @@ public class Warrior extends Entity {
             dir.setX(0);
     }
 
+    // accelerates if you continue going the same direction
     protected void speed_accel() {
 
         if (onGround() && dir.getX() != 0) {
@@ -111,32 +120,62 @@ public class Warrior extends Entity {
         }
     }
 
+    // Gets the status of the player
     protected void getStatus() {
-        if (dir.getY() > 0)
+        if (dir.getY() > 0) {
             if (attacking)
                 status = "airslash";
             else
                 status = "fall";
-        else if (dir.getY() < 0)
+        }
+
+        else if (dir.getY() < 0) {
             if (attacking)
                 status = "airslash";
             else
                 status = "jump";
-        else {
-            if (dir.getX() != 0)
-                if (attacking)
-                    status = "runslash";
-                else
-                    status = "run";
-            else {
-                if (attacking)
-                    status = "slash";
-                else
-                    status = "idle";
-            }
+        }
+
+        else if (dir.getX() != 0 && onGround()) {
+            if (attacking)
+                status = "runslash";
+            else
+                status = "run";
+        }
+
+        else if (onGround()) {
+            if (attacking)
+                status = "slash";
+            else
+                status = "idle";
         }
     }
 
+    // overrides getStatus in special cases
+    protected boolean specialCases() {
+        if (onGround() && status.equals("airslash")) {
+            status = "idle";
+            ticks = 20;
+            return true;
+        }
+
+        if (!onGround() && status.equals("runslash")) {
+            status = "fall";
+            ticks = 20;
+            return true;
+        }
+
+        if (status.equals("runslash") && dir.getX() == 0) {
+            status = "idle";
+            ticks = 20;
+            return true;
+
+        }
+
+        return false;
+    }
+
+    // Animates user
     protected void animate() {
         if (status.equals("idle") && onGround()) {
             image = idle.getNextFrame(true);
@@ -152,22 +191,38 @@ public class Warrior extends Entity {
         } else if (status.equals("fall")) {
             image = falling.getNextFrame(false);
             jumping.setCnt(0);
-        }
-
-        else if (status.equals("slash")) {
+        } else if (status.equals("slash")) {
+            activeHitboxes.addAll(slashing.getNextHitbox());
             image = slashing.getNextFrame(false);
         } else if (status.equals("runslash")) {
+            activeHitboxes.addAll(runSlashing.getNextHitbox());
             image = runSlashing.getNextFrame(false);
         } else if (status.equals("airslash")) {
+            activeHitboxes.addAll(airSlashing.getNextHitbox());
             image = airSlashing.getNextFrame(false);
         }
     }
 
     public void update(Graphics g) {
+        activeHitboxes.clear();
         x += dir.getX() * speed;
 
-        getStatus();
+        if (!specialCases())
+            getStatus();
+
+        if (onGround()) {
+            if (dir.getX() < 0)
+                orientation = 'l';
+
+            if (dir.getX() > 0)
+                orientation = 'r';
+        }
+
         animate();
+
+        for (Hitbox h : activeHitboxes) {
+            h.draw(g);
+        }
 
         super.update(g);
         speed_accel();
@@ -182,8 +237,20 @@ public class Warrior extends Entity {
             runSlashing.setCnt(0);
             airSlashing.setCnt(0);
         }
+
+        if (tumble > 0)
+            tumble--;
+
         swordBeam.draw(g);
         g.setColor(color);
-        g.fillPolygon(new int[] {drawX + 15, drawX + 35, drawX + 25}, new int[] {drawY - 35, drawY - 35, drawY - 20},3);
+
+        // Draws a triangle indicator
+        g.fillPolygon(new int[] { drawX + 15, drawX + 35, drawX + 25 },
+                new int[] { drawY - 35, drawY - 35, drawY - 20 }, 3);
+
+    }
+
+    public ArrayList<Hitbox> getHitboxes() {
+        return activeHitboxes;
     }
 }

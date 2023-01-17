@@ -2,16 +2,16 @@ import java.awt.*;
 import java.util.*;
 
 public class Hitbox {
-    private int x, y, radius, baseKB, KBgrowth, angle, damage;
+    private int x, y;
+    private int drawX, drawY;
+    private int xShift, yShift, radius, baseKB, scalingKB, angle, damage;
+    private int[] data;
 
-    public Hitbox(ArrayList<Integer> data) {
-        x = data.get(0);
-        y = data.get(1);
-        radius = data.get(2);
-        baseKB = data.get(3);
-        KBgrowth = data.get(4);
-        angle = data.get(5);
-        damage = data.get(7);
+    public Hitbox(int[] data) {
+        this.data = data;
+        xShift = data[0];
+        yShift = data[1];
+        radius = data[2];
     }
 
     // Source: https://yal.cc/rectangle-circle-intersection-test/comment-page-1/
@@ -21,11 +21,39 @@ public class Hitbox {
         return (deltaX * deltaX + deltaY * deltaY) < (radius * radius);
     }
 
-    public void apply_kb(Entity p) {
+    public int[] getData() {
+        return data;
+    }
+
+    public void apply_kb(Entity e) {
 
     }
 
+    public void setX(int val, char c) {
+        if (c == 'l')
+            x = xShift + val;
+        else
+            x = -xShift + 45 + val;
+    }
+
+    public void setY(int val) {
+        y = yShift + val;
+    }
+
+    public void setDrawX(int val, char c) {
+        if (c == 'l')
+            drawX = xShift + val;
+        else
+            drawX = -xShift + 45 + val;
+    }
+
+    public void setDrawY(int val) {
+        drawY = yShift + val;
+    }
+
+    // test function, for future development
     public void draw(Graphics g) {
-        g.fillOval(x, y, radius, radius);
+        g.setColor(Color.cyan);
+        g.fillOval(drawX, drawY, radius, radius);
     }
 }

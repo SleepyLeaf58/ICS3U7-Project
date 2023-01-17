@@ -1,3 +1,5 @@
+// Base class for all sprites in the game
+
 import java.awt.*;
 
 public class Sprite {
@@ -8,7 +10,6 @@ public class Sprite {
     protected boolean visible;
     protected Image image;
     protected Camera c;
-
 
     public Sprite(int x, int y, int width, int height, Camera c) {
         this.x = x;

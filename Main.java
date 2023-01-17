@@ -7,6 +7,5 @@ public class Main {
         frame.setSize(1024, 768);
         frame.setResizable(false);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }

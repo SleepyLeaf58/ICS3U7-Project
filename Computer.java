@@ -1,3 +1,8 @@
+
+/*
+
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -45,6 +50,7 @@ public class Computer extends Warrior {
         }
     }
 
+    // Commands the computer to attack
     private void attack() {
         if (dir.getX() == 0 && !specAttacking) {
             specAttacking = true;
@@ -54,6 +60,7 @@ public class Computer extends Warrior {
         }
     }
 
+    // Since this class extends the player, we override the keyboard functions
     public void keyPressed(KeyEvent e) {
 
     }

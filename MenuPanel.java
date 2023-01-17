@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.*;
 
 public class MenuPanel extends JPanel implements ActionListener {
 	private JLabel title;
@@ -14,10 +17,15 @@ public class MenuPanel extends JPanel implements ActionListener {
 
 	public MenuPanel() {
 		setLayout(null);
-		menuAnimation = new Animation("Images/Menu/Idle/Idle_", 32);
+
 		t = new Timer(120, this);
 
-		menuAnimation.load();
+		// Graphic
+		try {
+			menuGraphic = ImageIO.read(new File("Images/Menu/Idle/Idle_0.png"));
+		} catch (Exception e) {
+			System.out.println("Error " + e);
+		}
 
 		t.start();
 
@@ -64,8 +72,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 		} else if (e.getSource() == btnInstructions) {
 			Frame.flipToCard("Instructions");
 			t.stop();
-		} else if (e.getSource() == t) {
-			menuGraphic = menuAnimation.getNextFrame(true);
+		} else if (e.getSource() == t) {;
 			repaint();
 		} else {
 			System.exit(0);

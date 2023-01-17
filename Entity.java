@@ -14,9 +14,10 @@ public class Entity extends Sprite {
     protected double accel;
     protected int maxSpeed;
 
+    protected double KBSpeed = 0.4;
+
     protected int gravity = 1;
     protected int jumpHeight = 20;
-    protected int percent;
 
     protected int jumpCount = 2;
 
@@ -34,6 +35,9 @@ public class Entity extends Sprite {
     protected Camera c;
 
     protected int drawX = 0, drawY = 0;
+
+    protected double percent = 0;
+    protected boolean isHit = false;
 
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
             ArrayList<Tile> stageMap, Camera c) {
@@ -67,6 +71,10 @@ public class Entity extends Sprite {
 
     public int getDrawY() {
         return drawY;
+    }
+
+    public Vector2 getDir() {
+        return dir;
     }
 
     private void verticalCollisions() {
@@ -111,10 +119,6 @@ public class Entity extends Sprite {
         return false;
     }
 
-    public int getPercent() {
-        return percent;
-    }
-
     protected void applyGravity() {
         dir.incrementY(gravity);
         y += dir.getY();
@@ -124,7 +128,41 @@ public class Entity extends Sprite {
         return orientation;
     }
 
+    // Calculating Knockback Distance
+    public double calcKB(int damage, int weight, int scalingKB, int baseKB) {
+        double distance = ((((percent / 10 + percent * damage / 20) * 200 / (weight + 100) * 1.4) + 18) * scalingKB)
+                + baseKB;
+        return distance;
+    }
+
+    // Applying Knockback
+    public void applyKB(Hitbox h, char side) {
+        isHit = true;
+
+        int baseKB = h.getData()[3];
+        int scalingKB = h.getData()[4];
+        int angle = h.getData()[5];
+        int damage = h.getData()[6];
+        int weight = 100;
+
+        double xRatio = 0;
+        double yRatio = 0;
+        double dist = calcKB(damage, weight, scalingKB, baseKB);
+        xRatio = dist * Math.cos(angle);
+        yRatio = dist * Math.sin(angle);
+        if (side == 'r')
+            dir.setX(xRatio);
+        else
+            dir.setX(-xRatio);
+        dir.setY(-yRatio);
+    }
+
     public void update(Graphics g) {
+        if (isHit) {
+            x += dir.getX() * KBSpeed;
+            y += dir.getY() * KBSpeed;
+        }
+
         drawX = x + c.getPosShiftX();
         drawY = y + c.getPosShiftY();
 
