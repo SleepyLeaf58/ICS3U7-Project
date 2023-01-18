@@ -22,21 +22,35 @@ public class Computer extends Warrior {
         targetY = p.getY();
 
         // Update X
-        if (!specAttacking) {
-            if (targetX - x > 40) {
+        if (hitStun == 0 && !specAttacking) {
+            if (x <= 140) {
                 dir.setX(1);
                 if (orientation == 'l')
                     speed = 8;
                 if (onGround())
                     orientation = 'r';
-            } else if (targetX - x < -32) {
+            } else if (x >= 840) {
                 dir.setX(-1);
                 if (orientation == 'r')
                     speed = 8;
                 if (onGround())
                     orientation = 'l';
-            } else
-                dir.setX(0);
+            } else {
+                if (targetX - x > 40) {
+                    dir.setX(1);
+                    if (orientation == 'l')
+                        speed = 8;
+                    if (onGround())
+                        orientation = 'r';
+                } else if (targetX - x < -32) {
+                    dir.setX(-1);
+                    if (orientation == 'r')
+                        speed = 8;
+                    if (onGround())
+                        orientation = 'l';
+                } else
+                    dir.setX(0);
+            }
 
             // Update Y
 
@@ -52,7 +66,7 @@ public class Computer extends Warrior {
 
     // Commands the computer to attack
     private void attack() {
-        if (dir.getX() == 0 && !specAttacking) {
+        if (dir.getX() == 0 && !specAttacking && hitStun == 0) {
             specAttacking = true;
             swordBeam.launch();
         } else if (!attacking) {
@@ -70,8 +84,10 @@ public class Computer extends Warrior {
     }
 
     public void update(Graphics g) {
-        move();
-        attack();
+        if (ticks % 40 == 0) { // Increase reaction time
+            move();
+            attack();
+        }
         super.update(g);
     }
 }

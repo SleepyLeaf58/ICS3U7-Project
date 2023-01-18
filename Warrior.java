@@ -17,8 +17,6 @@ public class Warrior extends Entity {
     protected Attack runSlashing;
     protected Attack airSlashing;
 
-    protected String status = "";
-
     protected boolean attacking = false;
     protected boolean specAttacking = false;
 
@@ -30,7 +28,6 @@ public class Warrior extends Entity {
 
     // Timer for attacks
     protected int ticks = 0;
-    protected int tumble = 0;
     private Color color;
 
     public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color) {
@@ -65,7 +62,7 @@ public class Warrior extends Entity {
     }
 
     public void keyPressed(KeyEvent e) {
-        if (!specAttacking) {
+        if (hitStun == 0 && !specAttacking) {
             // Movement Handling
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 dir.setX(-1);
@@ -80,9 +77,10 @@ public class Warrior extends Entity {
                 if (onGround()) {
                     orientation = 'r';
                 }
-            } else if ((onGround() || jumpCount > 0) && e.getKeyCode() == KeyEvent.VK_UP) {
-                if (jumpCount == 1)
-                    dir.setY(0);
+            }
+
+            if (jumpCount > 0 && e.getKeyCode() == KeyEvent.VK_UP) {
+                dir.setY(0);
                 dir.incrementY(-jumpHeight);
                 jumpCount--;
             }
@@ -148,6 +146,7 @@ public class Warrior extends Entity {
                 status = "slash";
             else
                 status = "idle";
+
         }
     }
 
@@ -205,6 +204,7 @@ public class Warrior extends Entity {
 
     public void update(Graphics g) {
         activeHitboxes.clear();
+
         x += dir.getX() * speed;
 
         if (!specialCases())
@@ -238,19 +238,19 @@ public class Warrior extends Entity {
             airSlashing.setCnt(0);
         }
 
-        if (tumble > 0)
-            tumble--;
-
         swordBeam.draw(g);
         g.setColor(color);
 
         // Draws a triangle indicator
         g.fillPolygon(new int[] { drawX + 15, drawX + 35, drawX + 25 },
                 new int[] { drawY - 35, drawY - 35, drawY - 20 }, 3);
-
     }
 
     public ArrayList<Hitbox> getHitboxes() {
         return activeHitboxes;
+    }
+
+    public boolean attacking() {
+        return attacking;
     }
 }

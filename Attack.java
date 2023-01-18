@@ -30,7 +30,6 @@ public class Attack extends Animation {
 
             for (int i = 0; i < frames; i++) {
                 if (in_range(i)) {
-                    System.out.println("a");
                     String[] frame_data = sc.nextLine().split(", ");
                     ArrayList<Hitbox> frame_hitboxes = new ArrayList<Hitbox>();
 
@@ -41,7 +40,6 @@ public class Attack extends Animation {
                     hitboxes.add(frame_hitboxes);
                 } else
                     hitboxes.add(new ArrayList<Hitbox>());
-                System.out.println(hitboxes.size());
             }
             sc.close();
 
@@ -77,7 +75,8 @@ public class Attack extends Animation {
 
     // actual gameplay
     public ArrayList<Hitbox> getNextHitbox() {
-        update(hitboxes.get(cnt));
-        return hitboxes.get(cnt);
+        ArrayList<Hitbox> h = hitboxes.get(cnt);
+        update(h);
+        return h;
     }
 }

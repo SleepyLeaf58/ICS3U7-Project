@@ -37,6 +37,7 @@ public class Animation {
     // Gets the next frame in the animation. Constantly cycles animation if cycle is
     // true, and if not, it stops after one cycle
     public BufferedImage getNextFrame(Boolean cycle) {
+        cnt++;
         if (cycle) {
             if (cnt >= arr.length - 1)
                 cnt = 0;
@@ -44,13 +45,16 @@ public class Animation {
             if (cnt >= arr.length - 1)
                 cnt = arr.length - 1;
         }
-        return arr[cnt++];
+        return arr[cnt];
     }
-
 
     // Sets animation frame to a certain frame
     public void setCnt(int cnt) {
         this.cnt = cnt;
+    }
+
+    public int getCnt() {
+        return cnt;
     }
 
 }

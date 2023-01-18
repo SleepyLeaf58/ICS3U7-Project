@@ -27,6 +27,7 @@ public class Entity extends Sprite {
     protected ArrayList<Tile> allMap = new ArrayList<Tile>();
 
     protected char orientation = 'l';
+    protected String status = "";
 
     protected int xShiftR;
     protected int xShiftL;
@@ -38,6 +39,9 @@ public class Entity extends Sprite {
 
     protected double percent = 0;
     protected boolean isHit = false;
+    protected double hitDist = 0;
+    protected double distance = 0;
+    protected int hitStun = 0;
 
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
             ArrayList<Tile> stageMap, Camera c) {
@@ -112,10 +116,10 @@ public class Entity extends Sprite {
     protected boolean onGround() {
         for (Tile tile : allMap) {
             if (y == tile.getTTop() - height) {
-                jumpCount = 2;
                 return true;
             }
         }
+
         return false;
     }
 
@@ -132,6 +136,7 @@ public class Entity extends Sprite {
     public double calcKB(int damage, int weight, int scalingKB, int baseKB) {
         double distance = ((((percent / 10 + percent * damage / 20) * 200 / (weight + 100) * 1.4) + 18) * scalingKB)
                 + baseKB;
+        this.distance = distance;
         return distance;
     }
 
@@ -146,10 +151,22 @@ public class Entity extends Sprite {
         int weight = 100;
 
         double xRatio = 0;
-        double yRatio = 0;
+        double yRatio = 3;
+        double xDist = 0;
+        double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
-        xRatio = dist * Math.cos(angle);
-        yRatio = dist * Math.sin(angle);
+
+        dir.setX(0);
+        dir.setY(0);
+
+        xDist = dist * Math.cos(angle);
+        yDist = dist * Math.sin(angle);
+
+        xRatio = 3 * xDist / yDist;
+
+        hitStun = (int) (dist * 0.4);
+        percent += damage;
+
         if (side == 'r')
             dir.setX(xRatio);
         else
@@ -158,23 +175,33 @@ public class Entity extends Sprite {
     }
 
     public void update(Graphics g) {
-        if (isHit) {
+        if (!onGround() && isHit) {
             x += dir.getX() * KBSpeed;
             y += dir.getY() * KBSpeed;
+            hitDist += KBSpeed;
+        } else {
+            hitDist = 0;
         }
 
+        if (hitDist >= distance) {
+            isHit = false;
+        }
         drawX = x + c.getPosShiftX();
         drawY = y + c.getPosShiftY();
 
-        // Only allows for 1 midair jump
-        if (!onGround() && jumpCount == 2)
-            jumpCount--;
+        if (hitStun > 0)
+            hitStun--;
 
         horizontalCollisions();
         applyGravity();
         verticalCollisions();
 
         drawSprite(g);
+
+        if (onGround() && status.equals("jumping"))
+            jumpCount = 1;
+        else if (onGround())
+            jumpCount = 2;
     }
 
     public void drawSprite(Graphics g) {
@@ -184,5 +211,7 @@ public class Entity extends Sprite {
             g.drawImage(image, drawX - xShiftR, drawY - yShift, imgWidth, imgHeight, null);
         else
             g.drawImage(image, drawX + 125 - xShiftL, drawY - yShift, -imgWidth, imgHeight, null);
+
+        System.out.println(percent + " " + dir.getX() + " " + dir.getY() + " " + distance + " " + isHit);
     }
 }
