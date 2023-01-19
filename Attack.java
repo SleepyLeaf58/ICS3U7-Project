@@ -1,4 +1,7 @@
 /*
+ * David Zhai
+ * 1/18/2023
+ * For ICS3U7 Ms.Strelkovska
  * Extends animation. Used to animate attacks and receive hitbox data
  */
 

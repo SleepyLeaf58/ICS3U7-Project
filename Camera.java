@@ -5,15 +5,10 @@ public class Camera {
     private ArrayList<Entity> players;
     private Rectangle bounds;
 
-    private double depthUpdateSpeed = 5;
     private double positionUpdateSpeed = 5;
-
-    private double depthMax = -10;
-    private double depthMin = -22;
 
     private int posShiftX = 512;
     private int posShiftY = 384;
-    private double cameraZoom = 1;
 
     private int targetX;
     private int targetY;

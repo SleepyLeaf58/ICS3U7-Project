@@ -1,7 +1,9 @@
-
 /*
-
-*/
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for AI
+ */
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,13 +25,13 @@ public class Computer extends Warrior {
 
         // Update X
         if (hitStun == 0 && !specAttacking) {
-            if (x <= 140) {
+            if (x <= 180) {
                 dir.setX(1);
                 if (orientation == 'l')
                     speed = 8;
                 if (onGround())
                     orientation = 'r';
-            } else if (x >= 840) {
+            } else if (x >= 800) {
                 dir.setX(-1);
                 if (orientation == 'r')
                     speed = 8;

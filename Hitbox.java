@@ -1,3 +1,10 @@
+/*
+* David Zhai
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for slashing hitboxes
+ */
+
 import java.awt.*;
 import java.util.*;
 

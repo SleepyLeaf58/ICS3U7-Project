@@ -1,3 +1,10 @@
+/*
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for the menu
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -8,17 +15,14 @@ import java.io.*;
 
 public class MenuPanel extends JPanel implements ActionListener {
 	private JLabel title;
-	private JButton btnGame;
+	private JButton btnPlay;
 	private JButton btnInstructions;
 	private JButton btnQuit;
 	private BufferedImage menuGraphic = null;
-	private Timer t;
 	private Animation menuAnimation;
 
 	public MenuPanel() {
 		setLayout(null);
-
-		t = new Timer(120, this);
 
 		// Graphic
 		try {
@@ -27,19 +31,17 @@ public class MenuPanel extends JPanel implements ActionListener {
 			System.out.println("Error " + e);
 		}
 
-		t.start();
-
 		// Title
 		title = new JLabel(new ImageIcon("Images/Buttons/Smash.png"));
 		title.setBounds(655, 200, 300, 70);
 
 		// Play Button
-		btnGame = new JButton(new ImageIcon("Images/Buttons/Play.png"));
-		btnGame.setBorderPainted(true);
-		btnGame.setFocusPainted(false);
-		btnGame.setContentAreaFilled(false);
-		btnGame.addActionListener(this);
-		btnGame.setBounds(650, 300, 300, 70);
+		btnPlay = new JButton(new ImageIcon("Images/Buttons/Play.png"));
+		btnPlay.setBorderPainted(true);
+		btnPlay.setFocusPainted(false);
+		btnPlay.setContentAreaFilled(false);
+		btnPlay.addActionListener(this);
+		btnPlay.setBounds(650, 300, 300, 70);
 
 		// Instructions Button
 		btnInstructions = new JButton(new ImageIcon("Images/Buttons/Instructions.png"));
@@ -58,7 +60,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 		btnQuit.setBounds(650, 500, 300, 70);
 
 		add(title);
-		add(btnGame);
+		add(btnPlay);
 		add(btnInstructions);
 		add(btnQuit);
 		setBackground(new Color(255, 255, 255));
@@ -66,14 +68,10 @@ public class MenuPanel extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnGame) {
-			Frame.flipToCard("Game");
-			t.stop();
+		if (e.getSource() == btnPlay) {
+			Frame.flipToCard("PlayMenu");
 		} else if (e.getSource() == btnInstructions) {
 			Frame.flipToCard("Instructions");
-			t.stop();
-		} else if (e.getSource() == t) {;
-			repaint();
 		} else {
 			System.exit(0);
 		}

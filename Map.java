@@ -1,7 +1,10 @@
-
 /*
-
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for loading map
  */
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;

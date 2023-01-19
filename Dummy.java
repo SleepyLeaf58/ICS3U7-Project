@@ -1,3 +1,10 @@
+/*
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for Practice Dummy
+ */
+
 import java.awt.*;
 import java.io.File;
 import java.util.*;
@@ -23,5 +30,7 @@ public class Dummy extends Entity {
         if (!isHit) {
             dir.setX(0);
         }
+
+        System.out.println(dir.getX() + " " + dir.getY());
     }
 }

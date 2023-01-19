@@ -1,9 +1,16 @@
+/*
+ * Frank Huang
+ * 1/18/2023
+ * For ICS3U7 Ms.Strelkovska
+ * Class used for instructions
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class InstructionsPanel extends JPanel implements ActionListener{
-	private JButton buttonMenu;
+public class InstructionsPanel extends JPanel implements ActionListener {
+    private JButton buttonMenu;
 
     public InstructionsPanel() {
         buttonMenu = new JButton("Menu");
@@ -14,7 +21,7 @@ public class InstructionsPanel extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonMenu) {
-        	Frame.layout.show(Frame.pane, "Menu");
+            Frame.layout.show(Frame.pane, "Menu");
         }
     }
 

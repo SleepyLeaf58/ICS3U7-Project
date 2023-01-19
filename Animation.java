@@ -1,5 +1,8 @@
 /*
- * Creates animations
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for player animations
  */
 
 import javax.imageio.ImageIO;
