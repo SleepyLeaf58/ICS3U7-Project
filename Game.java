@@ -1,9 +1,10 @@
 /*
+* Frank Huang and David Zhai
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Game Logic
+ */
 
-*/
-
-import javax.smartcardio.CardException;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -16,11 +17,17 @@ public class Game {
 
     private Warrior w;
     private Computer c;
-    private Dummy d;
     private ArrayList<Entity> activeSprites = new ArrayList<Entity>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-    private boolean toCheckHitbox = false;
-    private boolean toCheckHitbox2 = false;
+    // player
+    private boolean checkWarriorHitbox = false;
+
+    // computer
+    private boolean checkCompHitbox = false;
+
+    private PIndicator playerPercent, aiPercent;
+
+    private boolean compWin = false, playerWin = false;
 
     public Game() {
         camera = new Camera(activeSprites);
@@ -29,13 +36,14 @@ public class Game {
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
 
-        w = new Warrior(200, 400, platMap, stageMap, camera, new Color(255, 0, 0));
+        w = new Warrior(200, 400, platMap, stageMap, camera, new Color(0, 255, 0));
         activeSprites.add(w);
-        c = new Computer(700, 400, platMap, stageMap, camera, new Color(0, 255, 0),
+        c = new Computer(700, 400, platMap, stageMap, camera, new Color(255, 0, 0),
                 w);
         activeSprites.add(c);
-        d = new Dummy(200, 400, platMap, stageMap, camera);
-        activeSprites.add(d);
+
+        playerPercent = new PIndicator(w, 160, 650);
+        aiPercent = new PIndicator(c, 740, 650);
 
         sprites.addAll(platMap);
         sprites.addAll(stageMap);
@@ -56,38 +64,58 @@ public class Game {
 
     public void checkGetHit() {
 
-        if (!w.attacking())
-            toCheckHitbox = true;
+        if (!w.attacking()) {
+            checkWarriorHitbox = true;
+        }
 
-        if (toCheckHitbox)
+        if (checkWarriorHitbox) {
             for (Hitbox h : w.getHitboxes()) {
                 if (h.intersects(c.getBounds())) {
                     System.out.println("c got hit.");
                     c.applyKB(h, w.getOrientation());
-                    toCheckHitbox = false;
-                    break;
-                }
-                if (h.intersects(d.getBounds())) {
-                    System.out.println("Jason Yuen got hit.");
-                    d.applyKB(h, w.getOrientation());
-                    toCheckHitbox = false;
+                    checkWarriorHitbox = false;
                     break;
                 }
             }
+        }
 
-        if (!c.attacking())
-            toCheckHitbox2 = true;
+        for (Projectile p : w.getProjectiles()) {
+            if (!p.hasHit() && p.getBounds().intersects(c.getBounds())) {
+                System.out.println("c got hit.");
+                c.applyKB(p, w.getOrientation());
+                p.setHit(true);
+            }
+        }
 
-        if (toCheckHitbox2)
+        if (!c.attacking()) {
+            checkCompHitbox = true;
+        }
+
+        if (checkCompHitbox) {
             for (Hitbox h : c.getHitboxes()) {
                 if (h.intersects(w.getBounds())) {
                     System.out.println("Warrior got hit.");
                     w.applyKB(h, c.getOrientation());
-                    toCheckHitbox2 = false;
+                    checkCompHitbox = false;
                     break;
                 }
             }
+        }
 
+        for (Projectile p : c.getProjectiles()) {
+            if (!p.hasHit() && p.getBounds().intersects(w.getBounds())) {
+                w.applyKB(p, c.getOrientation());
+                p.setHit(true);
+            }
+        }
+    }
+
+    public boolean getPlayerWin() {
+        return playerWin;
+    }
+
+    public boolean getCompWin() {
+        return compWin;
     }
 
     public void run(Graphics g) {
@@ -96,6 +124,31 @@ public class Game {
             sprite.update(g);
         }
         camera.update(g);
+        playerPercent.update(g);
+        aiPercent.update(g);
+        Cosmetics.playerProfile(g, 0, 570);
+        Cosmetics.computerProfile(g, 724, 570);
+
+        // Ending Game
+        if (w.getY() >= 1600 && !compWin) {
+            playerWin = true;
+            reset();
+            Frame.flipToCard("EndScreen");
+        } else if (c.getY() >= 1600 && !playerWin) {
+            compWin = true;
+            reset();
+            Frame.flipToCard("EndScreen");
+        }
     }
 
+    public void reset() {
+        playerWin = false;
+        compWin = false;
+        w.resetPercent();
+        c.resetPercent();
+        w.setX(200);
+        w.setY(400);
+        c.setX(700);
+        c.setY(400);
+    }
 }
