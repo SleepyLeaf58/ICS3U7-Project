@@ -39,6 +39,10 @@ public class Frame extends JFrame {
 		pane.add("EndScreen", endScreen);
 	}
 
+	public static EndScreen getEndScreen() {
+		return endScreen;
+	}
+
 	public static void flipToCard(String cardID) {
 		layout.show(pane, cardID);
 

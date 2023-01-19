@@ -130,13 +130,18 @@ public class Game {
         Cosmetics.computerProfile(g, 724, 570);
 
         // Ending Game
-        if (w.getY() >= 1600 && !compWin) {
+        if (c.getY() >= 1600 && !playerWin) {
+            System.out.println("");
             playerWin = true;
             reset();
+            Frame.getEndScreen().setWin(true);
             Frame.flipToCard("EndScreen");
-        } else if (c.getY() >= 1600 && !playerWin) {
+        }
+
+        if (w.getY() >= 1600 && !compWin) {
             compWin = true;
             reset();
+            Frame.getEndScreen().setWin(false);
             Frame.flipToCard("EndScreen");
         }
     }
