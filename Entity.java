@@ -184,11 +184,11 @@ public class Entity extends Sprite {
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
 
-        xRatio = xDist/hitStun;
-        yRatio = yDist/hitStun;
-
         hitStun = (int) (dist * 0.4);
         percent += damage;
+        
+        xRatio = xDist/hitStun;
+        yRatio = yDist/hitStun;
 
         if (side == 'r') {
             dir.setX(xRatio);
@@ -226,11 +226,11 @@ public class Entity extends Sprite {
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
 
-        xRatio = xDist/hitStun;
-        yRatio = yDist/hitStun;
-
         hitStun = (int) (dist * 0.4);
         percent += damage;
+        
+        xRatio = xDist/hitStun;
+        yRatio = yDist/hitStun;
 
         if (side == 'r')
             dir.setX(xRatio);
