@@ -17,7 +17,7 @@ public class Entity extends Sprite {
     protected double accel;
     protected int maxSpeed;
 
-    protected double KBSpeed = 0.4;
+    protected double KBSpeed = 1.5;
 
     protected int gravity = 1;
     protected int jumpHeight = 20;
@@ -25,6 +25,7 @@ public class Entity extends Sprite {
     protected int jumpCount = 2;
 
     protected Vector2 dir = new Vector2();
+    protected Vector2 KBdir = new Vector2();
     protected ArrayList<Tile> platMap;
     protected ArrayList<Tile> stageMap;
     protected ArrayList<Tile> allMap = new ArrayList<Tile>();
@@ -41,11 +42,13 @@ public class Entity extends Sprite {
     protected int drawX = 0, drawY = 0;
 
     protected double percent = 0;
-    protected boolean isHit = false;
-    protected double hitDist = 0;
     protected double distance = 0;
     protected int hitStun = 0;
     protected int gravityCap = 15;
+
+    protected boolean isHit = false;
+    protected double hitDist = 0;
+    protected double hitDistTravelled = 0;
 
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
             ArrayList<Tile> stageMap, Camera c) {
@@ -179,8 +182,8 @@ public class Entity extends Sprite {
         double damage = h.getData()[6];
         double weight = 100;
 
-        double xRatio = 0;
-        double yRatio = 0;
+        // double xRatio = 0;
+        // double yRatio = 0;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
@@ -189,6 +192,7 @@ public class Entity extends Sprite {
         // dir.setY(0);
 
         xDist = dist * Math.cos(angle);
+        hitDist = xDist;
         yDist = dist * Math.sin(angle);
 
         // xRatio = 2 * xDist / yDist;
@@ -196,18 +200,15 @@ public class Entity extends Sprite {
         hitStun = (int) (dist * KBSpeed);
         percent += damage;
 
-        xRatio = xDist / hitStun;
-        yRatio = yDist / hitStun;
+        // xRatio = xDist / hitStun * 100;
+        // yRatio = yDist / hitStun * 100;
 
-        if (side == 'r') {
-            dir.setX(xRatio);
-        }
-
-        else {
-            dir.setX(-xRatio);
-        }
-
-        dir.setY(-yRatio);
+        if (side == 'r')
+            KBdir.setX(xDist / 2);
+        else
+            KBdir.setX(-xDist / 2);
+        KBdir.setY(-yDist / 2);
+        // System.out.println(KBdir.getX() + " " + KBdir.getY());
     }
 
     public void applyKB(Projectile p, char side) {
@@ -219,8 +220,6 @@ public class Entity extends Sprite {
         double damage = p.getData()[3];
         double weight = 100;
 
-        double xRatio = 0;
-        double yRatio = 2;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
@@ -229,27 +228,36 @@ public class Entity extends Sprite {
         // dir.setY(0);
 
         xDist = dist * Math.cos(angle);
+        hitDist = xDist;
         yDist = dist * Math.sin(angle);
 
         // xRatio = 2 * xDist / yDist;
 
-        hitStun = (int) (dist * 0.4);
+        hitStun = (int) (dist * KBSpeed);
         percent += damage;
 
-        xRatio = xDist / hitStun;
-        yRatio = yDist / hitStun;
-
         if (side == 'r')
-            dir.setX(xRatio);
+            KBdir.setX(xDist / 2);
         else
-            dir.setX(-xRatio);
-        dir.setY(-yRatio);
+            KBdir.setX(-xDist / 2);
+        KBdir.setY(-yDist / 2);
     }
 
     public void update(Graphics g) {
-        if (hitStun > 0) {
-            x += dir.getX() * KBSpeed;
-            y += dir.getY() * KBSpeed;
+        if (!onGround())
+            hitStun = 0;
+
+        if (isHit && hitDistTravelled < hitDist) {
+            x += KBdir.getX() * KBSpeed;
+            y += KBdir.getY() * KBSpeed;
+            System.out.println(x + " " + y);
+            hitDistTravelled += KBSpeed;
+            // dir.setX(KBdir.getX());
+        } else {
+            hitDistTravelled = 0;
+            isHit = false;
+            KBdir.setX(0);
+            KBdir.setY(0);
         }
 
         drawX = x + c.getPosShiftX();
@@ -268,7 +276,8 @@ public class Entity extends Sprite {
             jumpCount = 1;
         else if (onGround())
             jumpCount = 2;
-        System.out.println(dir.getX() + " " + dir.getY() + " " + x + " " + y + " " + hitStun + " " + (hitStun > 0));
+        // System.out.println(KBdir.getX() + " " + KBdir.getY() + " " + x + " " + y + "
+        // " + hitStun + " " + (hitStun > 0));
     }
 
     public void drawSprite(Graphics g) {
