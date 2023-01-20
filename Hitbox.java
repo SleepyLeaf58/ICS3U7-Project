@@ -21,6 +21,9 @@ public class Hitbox {
         radius = data[2];
     }
 
+    // Circle Collision with rectangles. This involves finding the closest point on
+    // the rectangle to the closest point on the circle
+    // Then, it checks to see if the distance is less than the circle radius
     // Source: https://yal.cc/rectangle-circle-intersection-test/comment-page-1/
     public boolean intersects(Rectangle r) {
         int deltaX = x - (int) Math.max(r.getX(), Math.min(x, r.getX() + r.getWidth()));
@@ -28,12 +31,9 @@ public class Hitbox {
         return (deltaX * deltaX + deltaY * deltaY) < (radius * radius);
     }
 
+    // Gets Hitbox Data
     public int[] getData() {
         return data;
-    }
-
-    public void apply_kb(Entity e) {
-
     }
 
     public void setX(int val, char c) {
@@ -47,6 +47,7 @@ public class Hitbox {
         y = yShift + val;
     }
 
+    // Updates hitboxes draw coordinates
     public void setDrawX(int val, char c) {
         if (c == 'l')
             drawX = xShift + val;
@@ -59,8 +60,10 @@ public class Hitbox {
     }
 
     // test function, for future development
-    public void draw(Graphics g) {
-        g.setColor(Color.cyan);
-        g.fillOval(drawX, drawY, radius, radius);
-    }
+    /*
+     * public void draw(Graphics g) {
+     * g.setColor(Color.cyan);
+     * g.fillOval(drawX, drawY, radius, radius);
+     * }
+     */
 }

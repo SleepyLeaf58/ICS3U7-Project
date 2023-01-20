@@ -2,7 +2,7 @@
  * Frank Huang
  * 1/18/2023
  * For ICS3U7 Ms.Strelkovska
- * Class used for instructions
+ * Class used for instructions. Similar to MenuPanel.java
  */
 
 import java.awt.*;

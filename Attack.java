@@ -5,28 +5,28 @@
  * Extends animation. Used to animate attacks and receive hitbox data
  */
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.io.*;
 
-public class Attack extends Animation {
+public class Attack extends Animation { // Extends animation as it just adds hitbox functionality
     private Warrior w;
-    // frames where there are hitboxes
+
+    // Denotes frames where there are hitboxes
     private int start_active;
     private int end_active;
 
+    // Arraylist of all hitboxes
     ArrayList<ArrayList<Hitbox>> hitboxes = new ArrayList<ArrayList<Hitbox>>();
 
     public Attack(Warrior w, int start_active, int end_active, int frames, String imgPath, String dataPath) {
         super(imgPath, frames);
         this.w = w;
-        this.start_active = start_active;
-        this.end_active = end_active;
+        this.start_active = start_active; // First active frame
+        this.end_active = end_active; // Last active frame
         hitboxReader(dataPath);
     }
 
-    // Reads hitbox data from file
+    // Reads hitbox data from files in the Data folder
     private void hitboxReader(String path) {
         try {
             Scanner sc = new Scanner(new File(path));
@@ -51,6 +51,7 @@ public class Attack extends Animation {
         }
     }
 
+    // Returns if the frame is an active frame
     public boolean in_range(int n) {
         return n >= start_active && n <= end_active;
     }
@@ -67,7 +68,7 @@ public class Attack extends Animation {
         return int_arr;
     }
 
-
+    // Updates hitbox location to remain accurate with player models
     private void update(ArrayList<Hitbox> hitboxes) {
         for (Hitbox h : hitboxes) {
             h.setX(w.getX(), w.getOrientation());
@@ -77,7 +78,7 @@ public class Attack extends Animation {
         }
     }
 
-    // actual gameplay
+    // Returns the hitboxes that are used for the next frames
     public ArrayList<Hitbox> getNextHitbox() {
         ArrayList<Hitbox> h = hitboxes.get(cnt);
         update(h);

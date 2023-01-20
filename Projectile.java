@@ -77,10 +77,10 @@ public class Projectile extends Sprite {
 
         if (projOrientation == 'r') {
             g.drawImage(img, drawX, drawY, d_width, height, null);
-            g.drawRect(drawX, drawY, d_width, height);
+            // g.drawRect(drawX, drawY, d_width, height);
         } else {
             g.drawImage(img, drawX, drawY, -d_width, height, null);
-            g.drawRect(drawX - d_width, drawY, d_width, height);
+            // g.drawRect(drawX - d_width, drawY, d_width, height);
         }
 
         update();

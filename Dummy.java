@@ -10,10 +10,11 @@ import java.io.File;
 import java.util.*;
 import javax.imageio.ImageIO;
 
-public class Dummy extends Entity {
+public class Dummy extends Entity { // Extending dummy from entity
     public Dummy(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c) {
         super(x, y, 45, 74, 45, 74, platMap, stageMap, c);
 
+        // Initilizes percent and orientation
         percent = 0;
         orientation = 'r';
 

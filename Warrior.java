@@ -231,9 +231,12 @@ public class Warrior extends Entity {
 
         animate();
 
-        for (Hitbox h : activeHitboxes) {
-            h.draw(g);
-        }
+        // Drawing Hitboxes for Developmental Purposes
+        /*
+         * for (Hitbox h : activeHitboxes) {
+         * h.draw(g);
+         * }
+         */
 
         super.update(g);
         speed_accel();
