@@ -215,7 +215,8 @@ public class Warrior extends Entity {
 
     public void update(Graphics g) {
         activeHitboxes.clear();
-        x += dir.getX() * speed;
+        if (hitStun == 0)
+            x += dir.getX() * speed;
 
         if (!specialCases())
             getStatus();
