@@ -26,11 +26,13 @@ public class Game {
     // computer
     private boolean checkCompHitbox = false;
 
+    // Indicators
     private PIndicator playerPercent, aiPercent;
 
     private boolean compWin = false, playerWin = false;
 
     public Game() {
+        // Initialization
         camera = new Camera(activeSprites);
         map = new Map("Levels/Level.txt", camera);
         map.setupMap();
@@ -39,8 +41,7 @@ public class Game {
 
         w = new Warrior(200, 400, platMap, stageMap, camera, new Color(0, 255, 0));
         activeSprites.add(w);
-        c = new Computer(700, 400, platMap, stageMap, camera, new Color(255, 0, 0),
-                w);
+        c = new Computer(700, 400, platMap, stageMap, camera, new Color(255, 0, 0), w);
         activeSprites.add(c);
 
         playerPercent = new PIndicator(w, 160, 650);
@@ -51,6 +52,7 @@ public class Game {
         sprites.addAll(activeSprites);
     }
 
+    // Keyboard functions
     public void keyPressed(KeyEvent key) {
         for (Entity entity : activeSprites) {
             entity.keyPressed(key);
@@ -63,12 +65,14 @@ public class Game {
         }
     }
 
+    // Checks for hits
     public void checkGetHit() {
-
         if (!w.attacking()) {
             checkWarriorHitbox = true;
         }
 
+        // Checks for warrior hitbox, and only checks on hitbox if multiple collide, and
+        // only for that frame
         if (checkWarriorHitbox) {
             for (Hitbox h : w.getHitboxes()) {
                 if (h.intersects(c.getBounds())) {
@@ -79,6 +83,7 @@ public class Game {
             }
         }
 
+        // Checks for warrior projectiles
         for (Projectile p : w.getProjectiles()) {
             if (!p.hasHit() && p.getBounds().intersects(c.getBounds())) {
                 c.applyKB(p, w.getOrientation());
@@ -90,6 +95,7 @@ public class Game {
             checkCompHitbox = true;
         }
 
+        // Checks computer hitboxes
         if (checkCompHitbox) {
             for (Hitbox h : c.getHitboxes()) {
                 if (h.intersects(w.getBounds())) {
@@ -100,6 +106,7 @@ public class Game {
             }
         }
 
+        // Checks computer projectiles
         for (Projectile p : c.getProjectiles()) {
             if (!p.hasHit() && p.getBounds().intersects(w.getBounds())) {
                 w.applyKB(p, c.getOrientation());
@@ -121,10 +128,10 @@ public class Game {
             checkGetHit();
             sprite.update(g);
         }
-        camera.update(g);
-        playerPercent.update(g);
+        camera.update(g); // Updates Camera
+        playerPercent.update(g); // Updates percents
         aiPercent.update(g);
-        Cosmetics.playerProfile(g, 0, 570);
+        Cosmetics.playerProfile(g, 0, 570); // Draws cosmetics
         Cosmetics.computerProfile(g, 724, 570);
 
         // Ending Game
@@ -144,6 +151,7 @@ public class Game {
         }
     }
 
+    // Resetting the game
     public void reset() {
         playerWin = false;
         compWin = false;

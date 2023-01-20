@@ -12,7 +12,7 @@ import javax.swing.*;
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
     final int FPS = 60;
     Game game;
-    Timer timer = new Timer(1000 / FPS, this);
+    Timer timer = new Timer(1000 / FPS, this); // Timer for updating sprites
 
     public GamePanel() {
         addKeyListener(this);
@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         game.run(g);
     }
 
+    // Keyboard functions
     public void keyPressed(KeyEvent key) {
         game.keyPressed(key);
     }

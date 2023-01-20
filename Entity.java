@@ -1,5 +1,5 @@
 /*
- * Frank Huang
+ * Frank Huang and David Zhai
  * 1/18/2023
  * For ICS3U7 Ms.Strelkovska
  * Entity class that includes all combatants in the game
@@ -10,45 +10,46 @@ import java.awt.event.*;
 import java.util.*;
 
 public class Entity extends Sprite {
+    // Image dimensions
     protected int imgWidth;
     protected int imgHeight;
 
-    protected double speed;
-    protected double accel;
-    protected int maxSpeed;
+    // Speed Values
+    protected double speed; // Normal speed
+    protected double accel; // Acceleration
+    protected int maxSpeed; // Capping acceleration
+    protected double KBSpeed = 1.5; // Knockback speed
 
-    protected double KBSpeed = 1.5;
+    protected int gravity = 1; // Gravity decrement value
+    protected int jumpHeight = 20; // Jumpheight
 
-    protected int gravity = 1;
-    protected int jumpHeight = 20;
+    protected int jumpCount = 2; // Allows for doublejump
 
-    protected int jumpCount = 2;
-
-    protected Vector2 dir = new Vector2();
-    protected Vector2 KBdir = new Vector2();
-    protected ArrayList<Tile> platMap;
-    protected ArrayList<Tile> stageMap;
-    protected ArrayList<Tile> allMap = new ArrayList<Tile>();
+    protected Vector2 dir = new Vector2(); // Vector2 for regular movement
+    protected Vector2 KBdir = new Vector2(); // Vector2 when knocked back
+    protected ArrayList<Tile> platMap; // Platforms
+    protected ArrayList<Tile> stageMap; // Stage
+    protected ArrayList<Tile> allMap = new ArrayList<Tile>(); // All tiles
 
     protected char orientation = 'l';
-    protected String status = "";
+    protected String status = ""; // Used for animation
 
-    protected int xShiftR;
+    protected int xShiftR; // Shifting image position to match hitboxes
     protected int xShiftL;
     protected int yShift;
 
     protected Camera c;
 
-    protected int drawX = 0, drawY = 0;
+    protected int drawX = 0, drawY = 0; // Position drawn on screen
 
-    protected double percent = 0;
-    protected double distance = 0;
-    protected int hitStun = 0;
-    protected int gravityCap = 15;
+    protected double percent = 0; // Percent
+    protected double distance = 0; // Distance knocked back diagonally
+    protected int hitStun = 0; // Frames stunned
+    protected int gravityCap = 15; // Capping gravity to prevent phasing through tiles
 
-    protected boolean isHit = false;
-    protected double hitDist = 0;
-    protected double hitDistTravelled = 0;
+    protected boolean isHit = false; // Boolean used for knockback
+    protected double hitDist = 0; // X distance that must be travelled
+    protected double hitDistTravelled = 0; // X Distance already travelled
 
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
             ArrayList<Tile> stageMap, Camera c) {
@@ -58,7 +59,7 @@ public class Entity extends Sprite {
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
         this.c = c;
-        allMap.addAll(platMap);
+        allMap.addAll(platMap); // COmbination of platforms and Stage
         allMap.addAll(stageMap);
     }
 
@@ -88,19 +89,23 @@ public class Entity extends Sprite {
         return dir;
     }
 
+    // Vertical collisions
     private void verticalCollisions() {
+        // Collision from top includes all tiles
         for (Tile tile : allMap) {
             if (getBounds().intersects(tile.getBounds())) {
-                if (dir.getY() > 0 && y + height - tile.getTTop() < dir.getY() + 1) {
-                    y = tile.getTTop() - height;
-                    dir.setY(0);
+                if (dir.getY() > 0 && y + height - tile.getTTop() < dir.getY() + 1) { // If going downwards and position
+                                                                                      // is
+                    y = tile.getTTop() - height; // the top of the tile, maintain position
+                    dir.setY(0); // Sets Y value of Vector2 to 0
                 }
             }
         }
 
+        // Only the stage has bot collision
         for (Tile tile : stageMap) {
             if (getBounds().intersects(tile.getBounds())) {
-                if (dir.getY() < 0) {
+                if (dir.getY() < 0) { // If going upwards and position is the bottom of the tile, maintain position
                     y = tile.getTBot();
                     dir.setY(0);
                 }
@@ -108,18 +113,21 @@ public class Entity extends Sprite {
         }
     }
 
+    // Horizontal collisions
     private void horizontalCollisions() {
+        // Only stage needs horizontal collisions
         for (Tile tile : stageMap) {
             if (getBounds().intersects(tile.getBounds())) {
-                if (dir.getX() < 0) {
+                if (dir.getX() < 0) { // player moving leftwards
                     x = tile.getTRight();
-                } else if (dir.getX() > 0) {
+                } else if (dir.getX() > 0) { // player moving rightwards
                     x = tile.getTLeft() - width;
                 }
             }
         }
     }
 
+    // Checks if player is on the ground
     protected boolean onGround() {
         for (Tile tile : allMap) {
             if (y == tile.getTTop() - height) {
@@ -130,6 +138,7 @@ public class Entity extends Sprite {
         return false;
     }
 
+    // Applies gravity by constantly decrementing Y value of Vector2
     protected void applyGravity() {
         if (dir.getY() < gravityCap)
             dir.incrementY(gravity);
@@ -160,11 +169,13 @@ public class Entity extends Sprite {
         this.y = y;
     }
 
+    // Resets hitstun
     public void resetHitStun() {
         this.hitStun = 0;
     }
 
-    // Calculating Knockback Distance
+    // Calculating Knockback Distance with a formula from
+    // https://www.ssbwiki.com/Knockback
     public double calcKB(double damage, double weight, double scalingKB, double baseKB) {
         double distance = ((((percent / 10 + percent * damage / 20) * 200 / (weight + 100) * 1.4) + 18) * scalingKB)
                 + baseKB;
@@ -172,46 +183,39 @@ public class Entity extends Sprite {
         return distance;
     }
 
-    // Applying Knockback
+    // Applying Knockback for hitboxes
     public void applyKB(Hitbox h, char side) {
         isHit = true;
 
+        // Initilizing values
         double baseKB = h.getData()[3];
         double scalingKB = h.getData()[4];
         double angle = Math.toRadians(h.getData()[5]);
         double damage = h.getData()[6];
         double weight = 100;
 
-        // double xRatio = 0;
-        // double yRatio = 0;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
 
-        // dir.setX(0);
-        // dir.setY(0);
-
-        xDist = dist * Math.cos(angle);
+        xDist = dist * Math.cos(angle); // x-distance is cosine of angle
         hitDist = xDist;
-        yDist = dist * Math.sin(angle);
+        yDist = dist * Math.sin(angle); // y-distance is sine of angle
 
-        // xRatio = 2 * xDist / yDist;
-
+        // Updates hitstun and percent
         hitStun = (int) (dist * KBSpeed);
         percent += damage;
 
-        // xRatio = xDist / hitStun * 100;
-        // yRatio = yDist / hitStun * 100;
-
+        // Sets KB dir accordingly to create diagnonal knockback
         if (side == 'r')
             KBdir.setX(xDist / 2);
         else
             KBdir.setX(-xDist / 2);
         KBdir.setY(-yDist / 2);
-        // System.out.println(KBdir.getX() + " " + KBdir.getY());
     }
 
     public void applyKB(Projectile p, char side) {
+        // Similar to previous function, but for projectiles
         isHit = true;
 
         double baseKB = p.getData()[0];
@@ -224,14 +228,9 @@ public class Entity extends Sprite {
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
 
-        // dir.setX(0);
-        // dir.setY(0);
-
         xDist = dist * Math.cos(angle);
         hitDist = xDist;
         yDist = dist * Math.sin(angle);
-
-        // xRatio = 2 * xDist / yDist;
 
         hitStun = (int) (dist * KBSpeed);
         percent += damage;
@@ -244,13 +243,13 @@ public class Entity extends Sprite {
     }
 
     public void update(Graphics g) {
-        if (!onGround())
+        if (!onGround()) // Cancels hitstun if on ground
             hitStun = 0;
 
+        // Increments distance travelled
         if (isHit && hitDistTravelled < hitDist) {
             x += KBdir.getX() * KBSpeed;
             y += KBdir.getY() * KBSpeed;
-            System.out.println(x + " " + y);
             hitDistTravelled += KBSpeed;
             // dir.setX(KBdir.getX());
         } else {
@@ -260,9 +259,11 @@ public class Entity extends Sprite {
             KBdir.setY(0);
         }
 
+        // Updates the drawing coordinates
         drawX = x + c.getPosShiftX();
         drawY = y + c.getPosShiftY();
 
+        // Decrements hitstun
         if (hitStun > 0)
             hitStun--;
 
@@ -281,8 +282,9 @@ public class Entity extends Sprite {
     }
 
     public void drawSprite(Graphics g) {
-        g.setColor(Color.red);
-        g.drawRect(drawX, drawY, width, height);
+        // Drawing Hitbox Bounds
+        // g.setColor(Color.red);
+        // g.drawRect(drawX, drawY, width, height);
         if (orientation == 'r')
             g.drawImage(image, drawX - xShiftR, drawY - yShift, imgWidth, imgHeight, null);
         else

@@ -16,7 +16,7 @@ public class PIndicator {
     private int x, y;
 
     public PIndicator(Entity e, int x, int y) {
-        percent = Math.round(e.getPercent());
+        percent = Math.round(e.getPercent()); // Rounds percent
         this.e = e;
         this.x = x;
         this.y = y;
@@ -24,7 +24,6 @@ public class PIndicator {
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/RodinProUB.otf"));
         } catch (Exception ex) {
-            // TODO Auto-generated catch block
             ex.printStackTrace();
         }
         font = font.deriveFont(Font.BOLD, 40);

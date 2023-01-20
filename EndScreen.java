@@ -2,7 +2,7 @@
 * Frank Huang
 * 1/18/2023
 * For ICS3U7 Ms.Strelkovska
-* Class used for the menu
+* Class used for the End Screen. Most of the code is similar to MenuPanel.java
  */
 
 import java.awt.*;
@@ -46,6 +46,7 @@ public class EndScreen extends JPanel implements ActionListener {
         // Set Background
     }
 
+    // Checks if player has won, or computer has won
     public void setWin(boolean b) {
         if (b) {
             title.setIcon(new ImageIcon("Images/Menu/Won.png"));
@@ -56,12 +57,11 @@ public class EndScreen extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnBack) {
-            Frame.flipToCard("Menu");
+            Frame.flipToCard("Menu"); // Returns to menu
         }
     }
 
     public void paintComponent(Graphics g) {
-        // Improve Resolution
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.fillRect(0, 700, 1200, 100);

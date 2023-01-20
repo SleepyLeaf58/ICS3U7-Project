@@ -17,6 +17,7 @@ public class PlayMenu extends JPanel implements ActionListener {
     private JLabel title;
     private JButton btnGame;
     private JButton btnPractice;
+    private JButton btnCheats;
     private JButton btnBack;
     private BufferedImage menuGraphic = null;
 
@@ -50,20 +51,28 @@ public class PlayMenu extends JPanel implements ActionListener {
         btnPractice.addActionListener(this);
         btnPractice.setBounds(650, 400, 300, 70);
 
+        // Cheats Button
+        btnCheats = new JButton(new ImageIcon("Images/Buttons/Cheats.png"));
+        btnCheats.setBorderPainted(true);
+        btnCheats.setFocusPainted(false);
+        btnCheats.setContentAreaFilled(false);
+        btnCheats.addActionListener(this);
+        btnCheats.setBounds(650, 500, 300, 70);
+
         // Quit Button
         btnBack = new JButton(new ImageIcon("Images/Buttons/Back.png"));
         btnBack.setBorderPainted(true);
         btnBack.setFocusPainted(false);
         btnBack.setContentAreaFilled(false);
         btnBack.addActionListener(this);
-        btnBack.setBounds(650, 500, 300, 70);
+        btnBack.setBounds(650, 600, 300, 70);
 
         add(title);
         add(btnGame);
         add(btnPractice);
+        add(btnCheats);
         add(btnBack);
-        setBackground(new Color(255, 255, 255));
-        // Set Background
+        setBackground(new Color(255, 255, 255)); // Set Background
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -71,6 +80,8 @@ public class PlayMenu extends JPanel implements ActionListener {
             Frame.flipToCard("Game");
         } else if (e.getSource() == btnPractice) {
             Frame.flipToCard("Practice");
+        } else if (e.getSource() == btnCheats) {
+            Frame.flipToCard("CheatsGame");
         } else {
             Frame.flipToCard("Menu");
         }
