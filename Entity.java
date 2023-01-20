@@ -45,7 +45,7 @@ public class Entity extends Sprite {
     protected double hitDist = 0;
     protected double distance = 0;
     protected int hitStun = 0;
-    protected int gravityCap = 20;
+    protected int gravityCap = 15;
 
     public Entity(int x, int y, int width, int height, int imgWidth, int imgHeight, ArrayList<Tile> platMap,
             ArrayList<Tile> stageMap, Camera c) {
@@ -157,6 +157,10 @@ public class Entity extends Sprite {
         this.y = y;
     }
 
+    public void resetHitStun() {
+        this.hitStun = 0;
+    }
+
     // Calculating Knockback Distance
     public double calcKB(double damage, double weight, double scalingKB, double baseKB) {
         double distance = ((((percent / 10 + percent * damage / 20) * 200 / (weight + 100) * 1.4) + 18) * scalingKB)
@@ -167,6 +171,7 @@ public class Entity extends Sprite {
 
     // Applying Knockback
     public void applyKB(Hitbox h, char side) {
+        isHit = true;
 
         double baseKB = h.getData()[3];
         double scalingKB = h.getData()[4];
@@ -175,35 +180,34 @@ public class Entity extends Sprite {
         double weight = 100;
 
         double xRatio = 0;
-        double yRatio = 2;
+        double yRatio = 0;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
 
-        dir.setX(0);
-        dir.setY(0);
+        // dir.setX(0);
+        // dir.setY(0);
 
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
 
-        xRatio = 2 * xDist / yDist;
+        // xRatio = 2 * xDist / yDist;
 
-        hitStun = (int) (dist * 0.4);
+        hitStun = (int) (dist * KBSpeed);
         percent += damage;
+
+        xRatio = xDist / hitStun;
+        yRatio = yDist / hitStun;
 
         if (side == 'r') {
             dir.setX(xRatio);
-            setOrientation('l');
         }
 
         else {
             dir.setX(-xRatio);
-            setOrientation('r');
         }
 
         dir.setY(-yRatio);
-        System.out.println(xDist + " " + yDist);
-        System.out.println(dir.getX() + " " + dir.getY());
     }
 
     public void applyKB(Projectile p, char side) {
@@ -213,7 +217,7 @@ public class Entity extends Sprite {
         double scalingKB = p.getData()[1];
         double angle = Math.toRadians(p.getData()[2]);
         double damage = p.getData()[3];
-        int weight = 100;
+        double weight = 100;
 
         double xRatio = 0;
         double yRatio = 2;
@@ -221,18 +225,19 @@ public class Entity extends Sprite {
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
 
-        dir.setX(0);
-        dir.setY(0);
+        // dir.setX(0);
+        // dir.setY(0);
 
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
-        System.out.println(xDist + " " + yDist);
-        System.out.println(dir.getX() + " " + dir.getY());
 
-        xRatio = 2 * xDist / yDist;
+        // xRatio = 2 * xDist / yDist;
 
         hitStun = (int) (dist * 0.4);
         percent += damage;
+
+        xRatio = xDist / hitStun;
+        yRatio = yDist / hitStun;
 
         if (side == 'r')
             dir.setX(xRatio);
@@ -242,18 +247,11 @@ public class Entity extends Sprite {
     }
 
     public void update(Graphics g) {
-        if (!onGround() && isHit) {
+        if (hitStun > 0) {
             x += dir.getX() * KBSpeed;
             y += dir.getY() * KBSpeed;
-            hitDist += KBSpeed;
-            System.out.println(x + " " + y);
-        } else {
-            hitDist = 0;
         }
 
-        if (hitDist >= distance || onGround()) {
-            isHit = false;
-        }
         drawX = x + c.getPosShiftX();
         drawY = y + c.getPosShiftY();
 
@@ -270,6 +268,7 @@ public class Entity extends Sprite {
             jumpCount = 1;
         else if (onGround())
             jumpCount = 2;
+        System.out.println(dir.getX() + " " + dir.getY() + " " + x + " " + y + " " + hitStun + " " + (hitStun > 0));
     }
 
     public void drawSprite(Graphics g) {

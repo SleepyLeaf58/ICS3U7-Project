@@ -27,10 +27,6 @@ public class Dummy extends Entity {
 
     public void update(Graphics g) {
         super.update(g);
-        if (!isHit) {
-            dir.setX(0);
-        }
-
-        System.out.println(dir.getX() + " " + dir.getY());
+        x += dir.getX() * speed;
     }
 }

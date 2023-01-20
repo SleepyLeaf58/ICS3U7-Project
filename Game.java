@@ -19,6 +19,7 @@ public class Game {
     private Computer c;
     private ArrayList<Entity> activeSprites = new ArrayList<Entity>();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+
     // player
     private boolean checkWarriorHitbox = false;
 
@@ -71,7 +72,6 @@ public class Game {
         if (checkWarriorHitbox) {
             for (Hitbox h : w.getHitboxes()) {
                 if (h.intersects(c.getBounds())) {
-                    System.out.println("c got hit.");
                     c.applyKB(h, w.getOrientation());
                     checkWarriorHitbox = false;
                     break;
@@ -81,7 +81,6 @@ public class Game {
 
         for (Projectile p : w.getProjectiles()) {
             if (!p.hasHit() && p.getBounds().intersects(c.getBounds())) {
-                System.out.println("c got hit.");
                 c.applyKB(p, w.getOrientation());
                 p.setHit(true);
             }
@@ -94,7 +93,6 @@ public class Game {
         if (checkCompHitbox) {
             for (Hitbox h : c.getHitboxes()) {
                 if (h.intersects(w.getBounds())) {
-                    System.out.println("Warrior got hit.");
                     w.applyKB(h, c.getOrientation());
                     checkCompHitbox = false;
                     break;
@@ -153,7 +151,13 @@ public class Game {
         c.resetPercent();
         w.setX(200);
         w.setY(400);
+        w.getDir().setX(0);
+        w.getDir().setY(0);
+        w.resetHitStun();
         c.setX(700);
         c.setY(400);
+        c.getDir().setX(0);
+        c.getDir().setY(0);
+        c.resetHitStun();
     }
 }

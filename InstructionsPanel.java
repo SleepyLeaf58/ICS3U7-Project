@@ -11,11 +11,17 @@ import javax.swing.*;
 
 public class InstructionsPanel extends JPanel implements ActionListener {
     private JButton buttonMenu;
+    private JLabel instructions;
 
     public InstructionsPanel() {
+        setLayout(null);
+
         buttonMenu = new JButton("Menu");
+        Icon i = new ImageIcon("Images/Buttons/Back.png");
+        buttonMenu.setIcon(i);
+        buttonMenu.setBounds(0, 0, 300, 70);
         buttonMenu.addActionListener(this);
-        setLayout(new FlowLayout());
+
         add(buttonMenu);
     }
 

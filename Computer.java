@@ -86,10 +86,11 @@ public class Computer extends Warrior {
     }
 
     public void update(Graphics g) {
-        if (ticks % 40 == 0) { // Increase reaction time
+        if (ticks % 40 == 0) { // decrease reaction time
             move();
             attack();
         }
+
         super.update(g);
     }
 }

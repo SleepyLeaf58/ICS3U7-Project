@@ -65,7 +65,6 @@ public class PracticeGame {
         if (checkWarriorHitbox) {
             for (Hitbox h : w.getHitboxes()) {
                 if (h.intersects(d.getBounds())) {
-                    System.out.println("c got hit.");
                     d.applyKB(h, w.getOrientation());
                     checkWarriorHitbox = false;
                     break;
@@ -76,6 +75,7 @@ public class PracticeGame {
         for (Projectile p : w.getProjectiles()) {
             if (!p.hasHit() && p.getBounds().intersects(d.getBounds())) {
                 d.applyKB(p, w.getOrientation());
+                
                 p.setHit(true);
             }
         }
