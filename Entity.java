@@ -251,7 +251,6 @@ public class Entity extends Sprite {
             x += KBdir.getX() * KBSpeed;
             y += KBdir.getY() * KBSpeed;
             hitDistTravelled += KBSpeed;
-            // dir.setX(KBdir.getX());
         } else {
             hitDistTravelled = 0;
             isHit = false;
