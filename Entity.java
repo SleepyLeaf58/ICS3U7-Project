@@ -41,8 +41,6 @@ public class Entity extends Sprite {
     protected int drawX = 0, drawY = 0;
 
     protected double percent = 0;
-    protected boolean isHit = false;
-    protected double hitDist = 0;
     protected double distance = 0;
     protected int hitStun = 0;
     protected int gravityCap = 20;
@@ -175,7 +173,7 @@ public class Entity extends Sprite {
         double weight = 100;
 
         double xRatio = 0;
-        double yRatio = 2;
+        double yRatio = 0;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
@@ -186,7 +184,8 @@ public class Entity extends Sprite {
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
 
-        xRatio = 2 * xDist / yDist;
+        xRatio = xDist/hitStun;
+        yRatio = yDist/hitStun;
 
         hitStun = (int) (dist * 0.4);
         percent += damage;
@@ -216,7 +215,7 @@ public class Entity extends Sprite {
         int weight = 100;
 
         double xRatio = 0;
-        double yRatio = 2;
+        double yRatio = 0;
         double xDist = 0;
         double yDist = 0;
         double dist = calcKB(damage, weight, scalingKB, baseKB);
@@ -226,10 +225,9 @@ public class Entity extends Sprite {
 
         xDist = dist * Math.cos(angle);
         yDist = dist * Math.sin(angle);
-        System.out.println(xDist + " " + yDist);
-        System.out.println(dir.getX() + " " + dir.getY());
 
-        xRatio = 2 * xDist / yDist;
+        xRatio = xDist/hitStun;
+        yRatio = yDist/hitStun;
 
         hitStun = (int) (dist * 0.4);
         percent += damage;
@@ -242,17 +240,13 @@ public class Entity extends Sprite {
     }
 
     public void update(Graphics g) {
-        if (!onGround() && isHit) {
+        if (hitStun > 0) {
             x += dir.getX() * KBSpeed;
             y += dir.getY() * KBSpeed;
-            hitDist += KBSpeed;
-            System.out.println(x + " " + y);
-        } else {
-            hitDist = 0;
         }
 
-        if (hitDist >= distance || onGround()) {
-            isHit = false;
+        if (onGround()) {
+            hitStun = 0;
         }
         drawX = x + c.getPosShiftX();
         drawY = y + c.getPosShiftY();
