@@ -50,6 +50,7 @@ public class Warrior extends Entity {
         running = new Animation("Images/Player/Running/Running_", 24);
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
+
         hit = new Animation("Images/Player/Hit/Hit_", 1);
         slashing = new Attack(this, 11, 12, 20, "Images/Player/Slashing/Slashing_", "Data/Slashing.txt");
         runSlashing = new Attack(this, 10, 12, 21, "Images/Player/Run_Slashing/Run_Slashing_", "Data/RunSlashing.txt");
@@ -57,6 +58,7 @@ public class Warrior extends Entity {
         // swordBeam = new Projectile(this, 40, 75, 8, 0.5, 1, 1.4, 45, 1,
         // "Images/Player/swordBeam", c);
         swordBeam = new Projectile(this, 40, 75, 5, 0.5, 1, 1.4, 45, 5, "Images/Player/swordBeam", c);
+
 
         idle.load();
         running.load();
