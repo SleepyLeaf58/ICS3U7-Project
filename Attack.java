@@ -12,7 +12,7 @@ import java.io.*;
 
 public class Attack extends Animation {
     private Warrior w;
-    // hitbox active
+    // frames where there are hitboxes
     private int start_active;
     private int end_active;
 
@@ -26,7 +26,7 @@ public class Attack extends Animation {
         hitboxReader(dataPath);
     }
 
-    // Reads hitbox data from files
+    // Reads hitbox data from file
     private void hitboxReader(String path) {
         try {
             Scanner sc = new Scanner(new File(path));
@@ -66,6 +66,7 @@ public class Attack extends Animation {
 
         return int_arr;
     }
+
 
     private void update(ArrayList<Hitbox> hitboxes) {
         for (Hitbox h : hitboxes) {
