@@ -1,5 +1,5 @@
 /*
-* Frank Huang
+* Frank Huang and David Zhai
 * 1/18/2023
 * For ICS3U7 Ms.Strelkovska
 * Warrior Subclass of Entity
@@ -22,9 +22,6 @@ public class Warrior extends Entity {
 
     protected boolean attacking = false;
     protected boolean specAttacking = false;
-
-    // protected int jumpCap = -20; // Added to fix issues with subclasses jumping
-    // twice the height
 
     protected Projectile swordBeam;
     private ArrayList<Hitbox> activeHitboxes = new ArrayList<Hitbox>();
@@ -55,8 +52,6 @@ public class Warrior extends Entity {
         slashing = new Attack(this, 11, 12, 20, "Images/Player/Slashing/Slashing_", "Data/Slashing.txt");
         runSlashing = new Attack(this, 10, 12, 21, "Images/Player/Run_Slashing/Run_Slashing_", "Data/RunSlashing.txt");
         airSlashing = new Attack(this, 9, 12, 20, "Images/Player/Air_Slash/Air_Slash_", "Data/AirSlashing.txt");
-        // swordBeam = new Projectile(this, 40, 75, 8, 0.5, 1, 1.4, 45, 1,
-        // "Images/Player/swordBeam", c);
         swordBeam = new Projectile(this, 40, 75, 5, 0.5, 1, 1.4, 45, 5, "Images/Player/swordBeam", c);
 
 
@@ -72,7 +67,7 @@ public class Warrior extends Entity {
 
     public void keyPressed(KeyEvent e) {
         // Movement Handling
-        if (!specAttacking) {
+        if (!specAttacking) { // doesn't allow player to move while launching projectile
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 dir.setX(-1);
                 if (orientation == 'r') {
@@ -245,10 +240,11 @@ public class Warrior extends Entity {
 
         if ((specAttacking || attacking) && ticks < 20)
             ticks++;
-        if (ticks == 20) {
+        if (ticks == 20) { // attacks ended
             ticks = 0;
             attacking = false;
             specAttacking = false;
+            // resets all attacking animation
             slashing.setCnt(0);
             runSlashing.setCnt(0);
             airSlashing.setCnt(0);
