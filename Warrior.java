@@ -214,9 +214,15 @@ public class Warrior extends Entity {
         activeHitboxes.clear();
         if (hitStun == 0)
             x += dir.getX() * speed;
+        
+        String prevStatus = status;
 
         if (!specialCases())
             getStatus();
+        
+        // resets ticks if previous status is different; prevents "critical" attacks
+        if (!prevStatus.equals(status) && ticks < 20) 
+            ticks = 0;
 
         if (onGround()) {
             if (dir.getX() < 0)
