@@ -1,48 +1,66 @@
+/*
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for the menu
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.*;
 
 public class MenuPanel extends JPanel implements ActionListener {
 	private JLabel title;
-	private JButton btnGame;
+	private JButton btnPlay;
 	private JButton btnInstructions;
 	private JButton btnQuit;
 	private BufferedImage menuGraphic = null;
-	private Timer t;
 	private Animation menuAnimation;
 
 	public MenuPanel() {
 		setLayout(null);
-		menuAnimation = new Animation("Images/Player/Idle/Idle_", 32);
-		t = new Timer(120, this);
 
-		menuAnimation.load();
-
-		t.start();
+		// Graphic
+		try {
+			menuGraphic = ImageIO.read(new File("Images/Menu/Idle/Idle_0.png"));
+		} catch (Exception e) {
+			System.out.println("Error " + e);
+		}
 
 		// Title
-		title = new JLabel("SMASH");
+		title = new JLabel(new ImageIcon("Images/Buttons/Smash.png"));
 		title.setBounds(655, 200, 300, 70);
-		title.setFont(new Font("Arial", Font.TRUETYPE_FONT, 80));
 
 		// Play Button
-		btnGame = new JButton("Play");
-		btnGame.addActionListener(this);
-		btnGame.setBounds(650, 300, 300, 70);
+		btnPlay = new JButton(new ImageIcon("Images/Buttons/Play.png"));
+		btnPlay.setBorderPainted(true);
+		btnPlay.setFocusPainted(false);
+		btnPlay.setContentAreaFilled(false);
+		btnPlay.addActionListener(this);
+		btnPlay.setBounds(650, 300, 300, 70);
 
 		// Instructions Button
-		btnInstructions = new JButton("Instructions");
+		btnInstructions = new JButton(new ImageIcon("Images/Buttons/Instructions.png"));
+		btnInstructions.setBorderPainted(true);
+		btnInstructions.setFocusPainted(false);
+		btnInstructions.setContentAreaFilled(false);
 		btnInstructions.addActionListener(this);
 		btnInstructions.setBounds(650, 400, 300, 70);
 
 		// Quit Button
-		btnQuit = new JButton("Quit");
+		btnQuit = new JButton(new ImageIcon("Images/Buttons/Quit.png"));
+		btnQuit.setBorderPainted(true);
+		btnQuit.setFocusPainted(false);
+		btnQuit.setContentAreaFilled(false);
 		btnQuit.addActionListener(this);
 		btnQuit.setBounds(650, 500, 300, 70);
 
 		add(title);
-		add(btnGame);
+		add(btnPlay);
 		add(btnInstructions);
 		add(btnQuit);
 		setBackground(new Color(255, 255, 255));
@@ -50,15 +68,10 @@ public class MenuPanel extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnGame) {
-			Frame.flipToCard("Game");
-			t.stop();
+		if (e.getSource() == btnPlay) {
+			Frame.flipToCard("PlayMenu");
 		} else if (e.getSource() == btnInstructions) {
 			Frame.flipToCard("Instructions");
-			t.stop();
-		} else if (e.getSource() == t) {
-			menuGraphic = menuAnimation.getNextFrame(true);
-			repaint();
 		} else {
 			System.exit(0);
 		}

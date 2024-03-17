@@ -1,3 +1,10 @@
+/*
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for the Game Panel
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -5,12 +12,12 @@ import javax.swing.*;
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
     final int FPS = 60;
     Game game;
-    Timer timer = new Timer( 1000 / FPS, this);
+    Timer timer = new Timer(1000 / FPS, this); // Timer for updating sprites
+
     public GamePanel() {
         addKeyListener(this);
         timer.start();
         game = new Game();
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -24,6 +31,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         game.run(g);
     }
 
+    // Keyboard functions
     public void keyPressed(KeyEvent key) {
         game.keyPressed(key);
     }

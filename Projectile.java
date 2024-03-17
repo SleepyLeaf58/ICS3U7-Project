@@ -1,16 +1,20 @@
+/*
+* David Zhai
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for player projectiles
+ */
+
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.*;
-import javax.swing.*;
 
 public class Projectile extends Sprite {
     private Entity p;
     private double speed;
     private double accel;
     private Image img;
-    private boolean launched = false;
-    private char orientation;
+    private boolean hit = false;
 
     // used for drawing
     private double d_speed;
@@ -18,11 +22,21 @@ public class Projectile extends Sprite {
     private int d_width;
     private int drawX = 0, drawY = 0;
 
-    public Projectile(Entity p, int width, int height, double speed, double accel, String filePath, Camera c) {
-        super(0, 0, width, height, c);
+    private char projOrientation;
+
+    private double baseKB, scalingKB, angle, damage;
+
+    public Projectile(Entity p, int width, int height, double speed, double accel, double baseKB, double scalingKB,
+            double angle, double damage, String filePath, Camera c) {
+        super(-200, 0, width, height, c);
         this.p = p;
         this.speed = speed;
         this.accel = accel;
+
+        this.baseKB = baseKB;
+        this.scalingKB = scalingKB;
+        this.angle = angle;
+        this.damage = damage;
 
         try {
             img = ImageIO.read(new File(filePath + ".png"));
@@ -30,21 +44,18 @@ public class Projectile extends Sprite {
             System.out.println(e);
         }
 
-        setVisible(false);
     }
 
     public void launch() {
-        launched = true;
-        if (!visible) {
-            setVisible(true);
-
+        if (x <= -200 || x >= 1224) { // only allows player to launch projectile if previous iteration is out of the screen
+            hit = false;
             x = p.getX() + 50;
             y = p.getY();
             drawX = p.getDrawX();
             drawY = p.getDrawY();
 
-
-            if (p.getOrientation() == 'l') {
+            projOrientation = p.getOrientation();
+            if (projOrientation == 'l') {
                 d_speed = -speed;
                 d_accel = -accel;
                 d_width = width;
@@ -56,30 +67,42 @@ public class Projectile extends Sprite {
         }
     }
 
+    public double[] getData() {
+        double[] data = { baseKB, scalingKB, angle, damage };
+        return data;
+    }
+
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        if (visible) {
-            if (p.getOrientation() == 'r') {
-                g.drawImage(img, drawX, drawY, d_width, height, null);
-                g.drawRect(drawX, drawY, d_width, height);
-            } else {
-                g.drawImage(img, drawX, drawY, -d_width, height, null);
-                g.drawRect(drawX - d_width, drawY, d_width, height);
-            }
+
+        if (projOrientation == 'r') {
+            g.drawImage(img, drawX, drawY, d_width, height, null);
+            // g.drawRect(drawX, drawY, d_width, height);
+        } else {
+            g.drawImage(img, drawX, drawY, -d_width, height, null);
+            // g.drawRect(drawX - d_width, drawY, d_width, height);
         }
 
         update();
     }
 
+    // moves projectile
     private void update() {
-        if (x < 1224 || x > -200)
-            x += d_speed;
-            drawX += d_speed;
+        x += d_speed;
+
+        drawX += d_speed;
         d_speed += d_accel;
 
+        // fixes perspective issue with camera
         drawY = y + c.getPosShiftY();
-
-        if (launched)
-            setVisible(x > -200 && x < 1224);
     }
+
+    public void setHit(boolean b) {
+        hit = b;
+    }
+
+    public boolean hasHit() {
+        return hit;
+    }
+
 }

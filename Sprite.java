@@ -1,3 +1,10 @@
+/*
+ * Frank Huang
+ * 1/18/2023
+ * For ICS3U7 Ms.Strelkovska
+ * Base class for all sprites
+ */
+
 import java.awt.*;
 
 public class Sprite {

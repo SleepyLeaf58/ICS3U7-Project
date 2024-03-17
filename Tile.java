@@ -1,3 +1,10 @@
+/*
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for creating stage and platform tiles
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;

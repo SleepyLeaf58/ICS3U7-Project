@@ -1,13 +1,16 @@
-
 /*
-
+* Frank Huang
+* 1/18/2023
+* For ICS3U7 Ms.Strelkovska
+* Class used for loading map
  */
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;
 
 public class Map {
-    private final int xMapShift = 162;
+    private final int xMapShift = 162; // Mapshifts to center the map
     private final int yMapShift = 200;
     private ArrayList<char[]> mapArr = new ArrayList<char[]>();
     private ArrayList<Tile> platMap = new ArrayList<Tile>();
@@ -23,6 +26,7 @@ public class Map {
         String line;
         BufferedReader br = null;
 
+        // Reads with a BufferedReader to improve speed
         try {
             br = new BufferedReader(new FileReader(filePath));
             while ((line = br.readLine()) != null) {
@@ -34,7 +38,7 @@ public class Map {
     }
 
     public void setupMap() {
-        // Work on Enumerating level next
+        // Loops through array to create tiles at the correct positions
         for (int row = 0; row < mapArr.size(); row++) {
             for (int col = 0; col < mapArr.get(row).length; col++) {
                 if (mapArr.get(row)[col] == 'P') {
