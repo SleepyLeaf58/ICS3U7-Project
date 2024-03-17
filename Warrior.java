@@ -54,6 +54,7 @@ public class Warrior extends Entity {
         airSlashing = new Attack(this, 9, 12, 20, "Images/Player/Air_Slash/Air_Slash_", "Data/AirSlashing.txt");
         swordBeam = new Projectile(this, 40, 75, 5, 0.5, 1, 1.4, 45, 5, "Images/Player/swordBeam", c);
 
+
         idle.load();
         running.load();
         jumping.load();
@@ -213,11 +214,17 @@ public class Warrior extends Entity {
         activeHitboxes.clear();
         if (hitStun == 0)
             x += dir.getX() * speed;
+        
+        String prevStatus = status;
 
         String prevStatus = status;
 
         if (!specialCases())
             getStatus();
+        
+        // resets ticks if previous status is different; prevents "critical" attacks
+        if (!prevStatus.equals(status) && ticks < 20) 
+            ticks = 0;
 
         // resets tick if previous status is different; prevents "critical" attacks
         if (!prevStatus.equals(status) && ticks < 20) {

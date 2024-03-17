@@ -251,7 +251,6 @@ public class Entity extends Sprite {
             x += KBdir.getX() * KBSpeed;
             y += KBdir.getY() * KBSpeed;
             hitDistTravelled += KBSpeed;
-            // dir.setX(KBdir.getX());
         } else {
             hitDistTravelled = 0;
             isHit = false;
@@ -273,12 +272,11 @@ public class Entity extends Sprite {
 
         drawSprite(g);
 
+        // double jump mechanic
         if (onGround() && status.equals("jumping"))
             jumpCount = 1;
         else if (onGround())
             jumpCount = 2;
-        // System.out.println(KBdir.getX() + " " + KBdir.getY() + " " + x + " " + y + "
-        // " + hitStun + " " + (hitStun > 0));
     }
 
     public void drawSprite(Graphics g) {

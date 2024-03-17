@@ -71,7 +71,8 @@ public class Game {
             checkWarriorHitbox = true;
         }
 
-        // Checks for warrior hitbox, and only checks one hitbox each attack
+        // Checks for warrior hitbox, and only checks on hitbox if multiple collide, and
+        // only for that frame
         if (checkWarriorHitbox) {
             for (Hitbox h : w.getHitboxes()) {
                 if (h.intersects(c.getBounds())) {
@@ -82,7 +83,7 @@ public class Game {
             }
         }
 
-        // Checks for warrior projectiles, only does so once per projectile
+        // Checks for warrior projectiles
         for (Projectile p : w.getProjectiles()) {
             if (!p.hasHit() && p.getBounds().intersects(c.getBounds())) {
                 c.applyKB(p, w.getOrientation());
