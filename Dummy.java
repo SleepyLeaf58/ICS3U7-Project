@@ -28,6 +28,5 @@ public class Dummy extends Entity { // Extending dummy from entity
 
     public void update(Graphics g) {
         super.update(g);
-        x += dir.getX() * speed;
     }
 }

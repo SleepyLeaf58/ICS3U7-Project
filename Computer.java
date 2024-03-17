@@ -10,19 +10,18 @@ import java.awt.event.*;
 import java.util.*;
 
 public class Computer extends Warrior { // Extension of the Warrior Class
-    private Entity p; // The human player that the computer follows
-    int targetX, targetY; // Target X and Y positions
-    int jumpCap = -19; // Stopgap Solution for broken computer jumping
+    private Warrior p; // The human player that the computer follows
+    private int targetX, targetY; // Target X and Y positions
+    private int jumpCap = -19; // Stopgap Solution for broken computer jumping
+    // private Graph graph = new Graph();
 
-    public Computer(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color, Entity p) {
+    public Computer(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color, Warrior p) {
         super(x, y, platMap, stageMap, c, color);
         this.p = p;
     }
 
     // Movement
     private void move() {
-        targetX = p.getX(); // The computer follows the player position
-        targetY = p.getY();
 
         // Update X
         if (hitStun == 0 && !specAttacking) { // If not stunned and not doing a special attack
@@ -41,6 +40,10 @@ public class Computer extends Warrior { // Extension of the Warrior Class
                     orientation = 'l';
             } else {
                 // Movement towards Player
+                
+                targetX = p.getX(); // The computer follows the player position
+                targetY = p.getY();
+
                 if (targetX - x > 40) {
                     dir.setX(1);
                     if (orientation == 'l')
@@ -93,6 +96,7 @@ public class Computer extends Warrior { // Extension of the Warrior Class
             attack();
         }
 
+        // graph.draw(g, c);
         super.update(g);
     }
 }

@@ -80,10 +80,14 @@ public class PracticeGame {
         }
     }
 
+
     // Resets Game
-    public void reset() {
+    public void warriorReset() {
         w.setX(400);
         w.setY(400);
+    }
+
+    public void dummyReset() {
         d.setX(400);
         d.setY(400);
         d.resetPercent();
@@ -101,5 +105,10 @@ public class PracticeGame {
         dummyPercent.update(g);
         Cosmetics.playerProfile(g, 0, 570);
         Cosmetics.dummyProfile(g, 724, 570);
+
+        if (w.getY() >= 1600)
+            warriorReset();
+        if (d.getY() >= 1600)
+            dummyReset();
     }
 }

@@ -1,5 +1,5 @@
 /*
-* Frank Huang
+* Frank Huang and David Zhai
 * 1/18/2023
 * For ICS3U7 Ms.Strelkovska
 * Warrior Subclass of Entity
@@ -22,9 +22,6 @@ public class Warrior extends Entity {
 
     protected boolean attacking = false;
     protected boolean specAttacking = false;
-
-    // protected int jumpCap = -20; // Added to fix issues with subclasses jumping
-    // twice the height
 
     protected Projectile swordBeam;
     private ArrayList<Hitbox> activeHitboxes = new ArrayList<Hitbox>();
@@ -50,12 +47,11 @@ public class Warrior extends Entity {
         running = new Animation("Images/Player/Running/Running_", 24);
         jumping = new Animation("Images/Player/Jumping/Jumping_", 28);
         falling = new Animation("Images/Player/Falling/Falling_", 12);
+
         hit = new Animation("Images/Player/Hit/Hit_", 1);
         slashing = new Attack(this, 11, 12, 20, "Images/Player/Slashing/Slashing_", "Data/Slashing.txt");
         runSlashing = new Attack(this, 10, 12, 21, "Images/Player/Run_Slashing/Run_Slashing_", "Data/RunSlashing.txt");
         airSlashing = new Attack(this, 9, 12, 20, "Images/Player/Air_Slash/Air_Slash_", "Data/AirSlashing.txt");
-        // swordBeam = new Projectile(this, 40, 75, 8, 0.5, 1, 1.4, 45, 1,
-        // "Images/Player/swordBeam", c);
         swordBeam = new Projectile(this, 40, 75, 5, 0.5, 1, 1.4, 45, 5, "Images/Player/swordBeam", c);
 
         idle.load();
@@ -70,7 +66,7 @@ public class Warrior extends Entity {
 
     public void keyPressed(KeyEvent e) {
         // Movement Handling
-        if (!specAttacking) {
+        if (!specAttacking) { // doesn't allow player to move while launching projectile
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 dir.setX(-1);
                 if (orientation == 'r') {
@@ -98,7 +94,7 @@ public class Warrior extends Entity {
         attackHandler(e);
     }
 
-    // prevent user input during attack animation
+    // prevent user from attacking again during attack animation
     protected void attackHandler(KeyEvent e) {
         if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == KeyEvent.VK_W) {
             specAttacking = true;
@@ -218,8 +214,15 @@ public class Warrior extends Entity {
         if (hitStun == 0)
             x += dir.getX() * speed;
 
+        String prevStatus = status;
+
         if (!specialCases())
             getStatus();
+
+        // resets tick if previous status is different; prevents "critical" attacks
+        if (!prevStatus.equals(status) && ticks < 20) {
+            ticks = 0;
+        }
 
         if (onGround()) {
             if (dir.getX() < 0)
@@ -243,10 +246,11 @@ public class Warrior extends Entity {
 
         if ((specAttacking || attacking) && ticks < 20)
             ticks++;
-        if (ticks == 20) {
+        if (ticks == 20) { // attacks ended
             ticks = 0;
             attacking = false;
             specAttacking = false;
+            // resets all attacking animation
             slashing.setCnt(0);
             runSlashing.setCnt(0);
             airSlashing.setCnt(0);

@@ -47,7 +47,7 @@ public class Projectile extends Sprite {
     }
 
     public void launch() {
-        if (x <= -200 || x >= 1224) {
+        if (x <= -200 || x >= 1224) { // only allows player to launch projectile if previous iteration is out of the screen
             hit = false;
             x = p.getX() + 50;
             y = p.getY();
@@ -86,12 +86,14 @@ public class Projectile extends Sprite {
         update();
     }
 
+    // moves projectile
     private void update() {
         x += d_speed;
 
         drawX += d_speed;
         d_speed += d_accel;
 
+        // fixes perspective issue with camera
         drawY = y + c.getPosShiftY();
     }
 
