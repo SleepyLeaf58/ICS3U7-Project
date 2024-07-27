@@ -124,6 +124,7 @@ public class Game {
     }
 
     public void run(Graphics g) {
+        System.out.println(w.getX() + " " + c.getX());
         for (Sprite sprite : sprites) {
             checkGetHit();
             sprite.update(g);

@@ -47,11 +47,19 @@ public class EndScreen extends JPanel implements ActionListener {
     }
 
     // Checks if player has won, or computer has won
-    public void setWin(boolean b) {
-        if (b) {
+    public void setWin(boolean bool) {
+        if (bool) {
             title.setIcon(new ImageIcon("Images/Menu/Won.png"));
         } else {
             title.setIcon(new ImageIcon("Images/Menu/Lost.png"));
+        }
+    }
+
+    public void setWin2Player(String winner) {
+        if (winner.equals("P1")) {
+            title.setIcon(new ImageIcon("Images/Menu/P1Win.png"));
+        } else {
+            title.setIcon(new ImageIcon("Images/Menu/P2Win.png"));
         }
     }
 

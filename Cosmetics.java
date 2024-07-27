@@ -24,6 +24,19 @@ public class Cosmetics {
         g.drawImage(image, x, y, 300, 150, null);
     }
 
+    public static void player2Profile(Graphics g, int x, int y) {
+        // Loading image
+        Image image = null;
+
+        try {
+            image = ImageIO.read(new File("Images/Player2Profile.png"));
+        } catch (Exception e) {
+            System.out.println("Error " + e);
+        }
+
+        g.drawImage(image, x, y, 300, 150, null);
+    }
+
     // Computer Profile
     public static void computerProfile(Graphics g, int x, int y) {
         // Loading image

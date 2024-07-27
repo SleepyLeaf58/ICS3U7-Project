@@ -78,14 +78,14 @@ public class Warrior extends Entity {
     public void keyPressed(KeyEvent e) {
         // Movement Handling
         if (!specAttacking) { // doesn't allow player to move while launching projectile
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (e.getKeyCode() == left) {
                 dir.setX(-1);
                 if (orientation == 'r') {
                     speed = 8;
                 }
                 if (onGround())
                     orientation = 'l';
-            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            } else if (e.getKeyCode() == right) {
                 dir.setX(1);
                 if (orientation == 'l') {
                     speed = 8;
@@ -95,7 +95,7 @@ public class Warrior extends Entity {
                 }
             }
 
-            if (jumpCount > 0 && e.getKeyCode() == KeyEvent.VK_UP) {
+            if (jumpCount > 0 && e.getKeyCode() == up) {
                 dir.setY(0);
                 dir.incrementY(-jumpHeight);
                 jumpCount--;
@@ -107,19 +107,19 @@ public class Warrior extends Entity {
 
     // prevent user from attacking again during attack animation
     protected void attackHandler(KeyEvent e) {
-        if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == KeyEvent.VK_W) {
+        if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == shoot) {
             specAttacking = true;
             swordBeam.launch();
             activeProjectiles.add(swordBeam);
-        } else if (!attacking && e.getKeyCode() == KeyEvent.VK_Q) {
+        } else if (!attacking && e.getKeyCode() == slash) {
             attacking = true;
         }
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT)
+        if (e.getKeyCode() == left)
             dir.setX(0);
-        else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+        else if (e.getKeyCode() == right)
             dir.setX(0);
     }
 

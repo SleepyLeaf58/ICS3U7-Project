@@ -38,10 +38,10 @@
          map.setupMap();
          platMap = map.getPlatMap();
          stageMap = map.getStageMap();
- 
-         w1 = new Warrior(200, 400, platMap, stageMap, camera, new Color(0, 255, 0), KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD);
+
+         w1 = new Warrior(400, 400, platMap, stageMap, camera, new Color(0, 255, 0), KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R);
+         w2 = new Warrior(700, 400, platMap, stageMap, camera, new Color(0, 0, 255), KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD);
          activeSprites.add(w1);
-         w2 = new Warrior(700, 400, platMap, stageMap, camera, new Color(0, 255, 0), KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R);
          activeSprites.add(w2);
  
          p1Percent = new PIndicator(w1, 160, 650);
@@ -132,21 +132,21 @@
          p1Percent.update(g); // Updates percents
          p2Percent.update(g);
          Cosmetics.playerProfile(g, 0, 570); // Draws cosmetics
-         Cosmetics.computerProfile(g, 724, 570);
+         Cosmetics.player2Profile(g, 724, 570);
  
          // Ending Game
          if (w2.getY() >= 1600 && !p1Win) {
              System.out.println("");
              p1Win = true;
              reset();
-             Frame.getEndScreen().setWin(true);
+             Frame.getEndScreen().setWin2Player("P1");
              Frame.flipToCard("EndScreen");
          }
  
          if (w1.getY() >= 1600 && !p2Win) {
              p2Win = true;
              reset();
-             Frame.getEndScreen().setWin(false);
+             Frame.getEndScreen().setWin2Player("P2");
              Frame.flipToCard("EndScreen");
          }
      }
