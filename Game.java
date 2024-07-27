@@ -39,7 +39,7 @@ public class Game {
         platMap = map.getPlatMap();
         stageMap = map.getStageMap();
 
-        w = new Warrior(200, 400, platMap, stageMap, camera, new Color(0, 255, 0));
+        w = new Warrior(200, 400, platMap, stageMap, camera, new Color(0, 255, 0), KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_Q, KeyEvent.VK_W);
         activeSprites.add(w);
         c = new Computer(700, 400, platMap, stageMap, camera, new Color(255, 0, 0), w);
         activeSprites.add(c);
@@ -124,6 +124,7 @@ public class Game {
     }
 
     public void run(Graphics g) {
+        System.out.println(w.getX() + " " + c.getX());
         for (Sprite sprite : sprites) {
             checkGetHit();
             sprite.update(g);

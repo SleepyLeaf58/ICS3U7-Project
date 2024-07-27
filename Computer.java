@@ -16,7 +16,7 @@ public class Computer extends Warrior { // Extension of the Warrior Class
     // private Graph graph = new Graph();
 
     public Computer(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color, Warrior p) {
-        super(x, y, platMap, stageMap, c, color);
+        super(x, y, platMap, stageMap, c, color, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_Q, KeyEvent.VK_W);
         this.p = p;
     }
 

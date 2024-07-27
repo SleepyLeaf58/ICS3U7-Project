@@ -16,6 +16,7 @@ import java.io.*;
 public class PlayMenu extends JPanel implements ActionListener {
     private JLabel title;
     private JButton btnGame;
+    private JButton btn2Player;
     private JButton btnPractice;
     private JButton btnCheats;
     private JButton btnBack;
@@ -33,7 +34,7 @@ public class PlayMenu extends JPanel implements ActionListener {
 
         // Title
         title = new JLabel(new ImageIcon("Images/Buttons/Smash.png"));
-        title.setBounds(655, 200, 300, 70);
+        title.setBounds(655, 100, 300, 70);
 
         // Play Button
         btnGame = new JButton(new ImageIcon("Images/Buttons/vsAI.png"));
@@ -41,9 +42,17 @@ public class PlayMenu extends JPanel implements ActionListener {
         btnGame.setFocusPainted(false);
         btnGame.setContentAreaFilled(false);
         btnGame.addActionListener(this);
-        btnGame.setBounds(650, 300, 300, 70);
+        btnGame.setBounds(650, 200, 300, 70);
 
-        // Instructions Button
+        // Play Local Button
+        btn2Player = new JButton(new ImageIcon("Images/Buttons/2Player.png"));
+        btn2Player.setBorderPainted(true);
+        btn2Player.setFocusPainted(false);
+        btn2Player.setContentAreaFilled(false);
+        btn2Player.addActionListener(this);
+        btn2Player.setBounds(650, 300, 300, 70);
+
+        // Practice Button
         btnPractice = new JButton(new ImageIcon("Images/Buttons/Practice.png"));
         btnPractice.setBorderPainted(true);
         btnPractice.setFocusPainted(false);
@@ -69,6 +78,7 @@ public class PlayMenu extends JPanel implements ActionListener {
 
         add(title);
         add(btnGame);
+        add(btn2Player);
         add(btnPractice);
         add(btnCheats);
         add(btnBack);
@@ -78,6 +88,8 @@ public class PlayMenu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnGame) {
             Frame.flipToCard("Game");
+        } else if (e.getSource() == btn2Player) {
+            Frame.flipToCard("2Player");
         } else if (e.getSource() == btnPractice) {
             Frame.flipToCard("Practice");
         } else if (e.getSource() == btnCheats) {

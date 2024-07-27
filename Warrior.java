@@ -31,7 +31,10 @@ public class Warrior extends Entity {
     protected int ticks = 0;
     private Color color;
 
-    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color) {
+    // Keys
+    protected int left, right, up, slash, shoot;
+
+    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color, int left, int right, int up, int slash, int shoot) {
         super(x, y, 45, 70, 160, 125, platMap, stageMap, c);
 
         this.color = color;
@@ -42,6 +45,13 @@ public class Warrior extends Entity {
         xShiftL = 30;
         xShiftR = 50;
         yShift = 50;
+
+        // Keys
+        this.left = left;
+        this.right = right;
+        this.up = up;
+        this.slash = slash;
+        this.shoot = shoot;
 
         idle = new Animation("Images/Player/Idle/Idle_", 32);
         running = new Animation("Images/Player/Running/Running_", 24);
@@ -68,14 +78,14 @@ public class Warrior extends Entity {
     public void keyPressed(KeyEvent e) {
         // Movement Handling
         if (!specAttacking) { // doesn't allow player to move while launching projectile
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (e.getKeyCode() == left) {
                 dir.setX(-1);
                 if (orientation == 'r') {
                     speed = 8;
                 }
                 if (onGround())
                     orientation = 'l';
-            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            } else if (e.getKeyCode() == right) {
                 dir.setX(1);
                 if (orientation == 'l') {
                     speed = 8;
@@ -85,7 +95,7 @@ public class Warrior extends Entity {
                 }
             }
 
-            if (jumpCount > 0 && e.getKeyCode() == KeyEvent.VK_UP) {
+            if (jumpCount > 0 && e.getKeyCode() == up) {
                 dir.setY(0);
                 dir.incrementY(-jumpHeight);
                 jumpCount--;
@@ -97,19 +107,19 @@ public class Warrior extends Entity {
 
     // prevent user from attacking again during attack animation
     protected void attackHandler(KeyEvent e) {
-        if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == KeyEvent.VK_W) {
+        if (dir.getX() == 0 && !specAttacking && e.getKeyCode() == shoot) {
             specAttacking = true;
             swordBeam.launch();
             activeProjectiles.add(swordBeam);
-        } else if (!attacking && e.getKeyCode() == KeyEvent.VK_Q) {
+        } else if (!attacking && e.getKeyCode() == slash) {
             attacking = true;
         }
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT)
+        if (e.getKeyCode() == left)
             dir.setX(0);
-        else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+        else if (e.getKeyCode() == right)
             dir.setX(0);
     }
 
@@ -215,8 +225,6 @@ public class Warrior extends Entity {
         if (hitStun == 0)
             x += dir.getX() * speed;
         
-        String prevStatus = status;
-
         String prevStatus = status;
 
         if (!specialCases())
