@@ -217,8 +217,6 @@ public class Warrior extends Entity {
         
         String prevStatus = status;
 
-        String prevStatus = status;
-
         if (!specialCases())
             getStatus();
         
