@@ -15,6 +15,7 @@ public class Frame extends JFrame {
 	private static MenuPanel menu;
 	private static InstructionsPanel instructions;
 	private static GamePanel game;
+	private static Local2PlayerPanel game2Player;
 	private static PlayMenu playMenu;
 	private static PracticePanel practicePanel;
 	private static EndScreen endScreen;
@@ -28,6 +29,7 @@ public class Frame extends JFrame {
 		menu = new MenuPanel();
 		instructions = new InstructionsPanel();
 		game = new GamePanel();
+		game2Player = new Local2PlayerPanel();
 		playMenu = new PlayMenu();
 		practicePanel = new PracticePanel();
 		endScreen = new EndScreen();
@@ -37,6 +39,7 @@ public class Frame extends JFrame {
 		pane.add("Menu", menu);
 		pane.add("Instructions", instructions);
 		pane.add("Game", game);
+		pane.add("2Player", game2Player);
 		pane.add("PlayMenu", playMenu);
 		pane.add("Practice", practicePanel);
 		pane.add("EndScreen", endScreen);
@@ -54,6 +57,8 @@ public class Frame extends JFrame {
 
 		if (cardID.equals("Game"))
 			game.requestFocusInWindow();
+		else if (cardID.equals("2Player"))
+			game2Player.requestFocusInWindow();
 		else if (cardID.equals("Instructions"))
 			instructions.requestFocusInWindow();
 		else if (cardID.equals("PlayMenu"))

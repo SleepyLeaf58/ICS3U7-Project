@@ -31,7 +31,10 @@ public class Warrior extends Entity {
     protected int ticks = 0;
     private Color color;
 
-    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color) {
+    // Keys
+    protected int left, right, up, slash, shoot;
+
+    public Warrior(int x, int y, ArrayList<Tile> platMap, ArrayList<Tile> stageMap, Camera c, Color color, int left, int right, int up, int slash, int shoot) {
         super(x, y, 45, 70, 160, 125, platMap, stageMap, c);
 
         this.color = color;
@@ -42,6 +45,13 @@ public class Warrior extends Entity {
         xShiftL = 30;
         xShiftR = 50;
         yShift = 50;
+
+        // Keys
+        this.left = left;
+        this.right = right;
+        this.up = up;
+        this.slash = slash;
+        this.shoot = shoot;
 
         idle = new Animation("Images/Player/Idle/Idle_", 32);
         running = new Animation("Images/Player/Running/Running_", 24);
